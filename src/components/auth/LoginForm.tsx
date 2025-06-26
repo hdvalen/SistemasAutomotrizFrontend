@@ -13,7 +13,7 @@ export function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
+
     try {
       await login(email, password);
     } catch (err) {
@@ -22,57 +22,57 @@ export function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-black px-4 py-12">
       <div className="max-w-md w-full space-y-8">
+        {/* Logo y título */}
         <div className="text-center">
-          <div className="flex justify-center">
-            <div className="bg-gradient-to-r from-primary-600 to-primary-700 p-4 rounded-2xl shadow-strong">
-              <Wrench className="h-12 w-12 text-white" />
+          <div className="flex justify-center mb-4">
+            <div className="bg-gradient-to-r from-blue-700 to-indigo-600 p-4 rounded-full shadow-lg">
+              <Wrench className="h-10 w-10 text-white" />
             </div>
           </div>
-          <h2 className="mt-6 text-3xl font-extrabold bg-gradient-to-r from-primary-700 to-secondary-600 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-extrabold text-white">
             AutoTaller Manager
           </h2>
-          <p className="mt-2 text-sm text-neutral-600">
+          <p className="mt-2 text-sm text-neutral-400">
             Sistema de Gestión de Taller Automotriz
           </p>
         </div>
-        
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="bg-white p-8 rounded-2xl shadow-medium border border-neutral-100 space-y-6">
-            <div>
-              <Input
-                label="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="tu@email.com"
-                required
-              />
-            </div>
-            
-            <div>
-              <Input
-                label="Contraseña"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-              />
-            </div>
+
+        {/* Formulario */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="bg-neutral-900 p-8 rounded-2xl shadow-xl border border-neutral-800 space-y-6">
+            <Input
+              label="Correo electrónico"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="tu@email.com"
+              required
+              className="text-white"
+            />
+
+            <Input
+              label="Contraseña"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              className="text-white"
+            />
 
             {error && (
-              <div className="flex items-center p-4 bg-danger-50 border border-danger-200 rounded-xl">
-                <AlertCircle className="h-5 w-5 text-danger-500 mr-3" />
-                <span className="text-sm text-danger-700">{error}</span>
+              <div className="flex items-center gap-2 p-3 bg-red-900/30 border border-red-800 rounded-md">
+                <AlertCircle className="h-5 w-5 text-red-400" />
+                <span className="text-sm text-red-300">{error}</span>
               </div>
             )}
 
             <Button
               type="submit"
               isLoading={isLoading}
-              className="w-full bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 shadow-medium"
+              className="w-full bg-gradient-to-r from-indigo-700 to-blue-700 hover:from-indigo-800 hover:to-blue-800 text-white font-medium rounded-lg shadow-lg transition duration-300"
               size="lg"
             >
               Iniciar Sesión
@@ -80,22 +80,23 @@ export function LoginForm() {
           </div>
         </form>
 
-        <div className="bg-white p-6 rounded-2xl shadow-soft border border-neutral-100">
-          <h3 className="text-sm font-semibold text-neutral-800 mb-4 flex items-center">
-            <div className="w-2 h-2 bg-primary-500 rounded-full mr-2"></div>
+        {/* Cuentas de prueba */}
+        <div className="bg-neutral-900 p-6 rounded-2xl shadow-md border border-neutral-800">
+          <h3 className="text-sm font-semibold text-white mb-4 flex items-center">
+            <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
             Cuentas de Prueba
           </h3>
-          <div className="space-y-3 text-xs text-neutral-600">
-            <div className="flex justify-between items-center p-2 bg-neutral-50 rounded-lg">
-              <strong className="text-primary-700">Administrador:</strong> 
+          <div className="space-y-3 text-sm text-neutral-300">
+            <div className="flex justify-between items-center p-2 bg-neutral-800 rounded-lg">
+              <strong className="text-blue-400">Administrador:</strong>
               <span>admin@autotaller.com / admin123</span>
             </div>
-            <div className="flex justify-between items-center p-2 bg-neutral-50 rounded-lg">
-              <strong className="text-secondary-700">Recepcionista:</strong> 
+            <div className="flex justify-between items-center p-2 bg-neutral-800 rounded-lg">
+              <strong className="text-purple-400">Recepcionista:</strong>
               <span>recepcionista@autotaller.com / recep123</span>
             </div>
-            <div className="flex justify-between items-center p-2 bg-neutral-50 rounded-lg">
-              <strong className="text-accent-700">Mecánico:</strong> 
+            <div className="flex justify-between items-center p-2 bg-neutral-800 rounded-lg">
+              <strong className="text-pink-400">Mecánico:</strong>
               <span>mecanico@autotaller.com / mec123</span>
             </div>
           </div>
