@@ -5,6 +5,7 @@ import { LoginForm } from './components/auth/LoginForm';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Layout } from './components/layout/Layout';
 import { Dashboard } from './pages/Dashboard';
+import { HomePage } from './pages/HomePages';
 /* import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { OrdenesServicio } from './pages/OrdenesServicio';
@@ -19,24 +20,32 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
       
-      <Route 
-        path="/login" 
-        element={
-          isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginForm />
-        } 
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Dashboard />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/" element={<HomePage />} />
+
+  <Route path="/login" element={<LoginForm />} />
+
+  <Route
+    path="/dashboard"
+    element={
+      <ProtectedRoute>
+        <Layout>
+          <Dashboard />
+        </Layout>
+      </ProtectedRoute>
+    }
+  />
+  <Route
+    path="/homepages"
+    element={
+        <Layout>
+          <HomePage />
+        </Layout>
+
+    }
+  />
+
+
       {/* <Route
         path="/clientes"
         element={
