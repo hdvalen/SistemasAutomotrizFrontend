@@ -19,25 +19,38 @@ export interface AuthState {
 }
 
 export interface Client {
-  id: string;
+  id: number;
   name: string;
   lastName: string;
-  Email: string;
-  Phone: string;
-  Birth?: string;
-  Identification: string;
-  TypeVehicle?: TypeVehicle;
-
+  email: string;
+  phone: string;
+  birth: string;
+  identification: string;
+  createdAt: string;
+  updatedAt: string;
+  vehicle?: Vehicle;
+  serviceOrders?: ServiceOrder;
 }
+
 export interface Vehicle {
   id: number;
-  ClienteId: number;
-  Brand: string;
-  Model: string;
-  Vin: string;
-  Mileage: number;
-  TypeVehicleId: number;
+  client_id: number;
+  brand: string;
+  model: string;
+  vin: string;
+  mileage: number;
+  type_vehicle_id: number;
+  client?: Client;
+  typeVehicle?: TypeVehicle;
+  createdAt: string;
+  updatedAt: string;
+}
 
+export interface TypeVehicle {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }
 export interface ServiceOrder {
   id: number;

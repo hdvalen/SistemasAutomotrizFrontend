@@ -6,6 +6,7 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Layout } from './components/layout/Layout';
 import { Dashboard } from './pages/Dashboard';
 import { HomePage } from './pages/homepages';
+import { Clientes } from './pages/Clientes';
 /* import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { OrdenesServicio } from './pages/OrdenesServicio';
@@ -45,8 +46,18 @@ function AppRoutes() {
     }
   />
 
-
-      {/* <Route
+      {
+        <Route
+        path="/clientes"
+        element={
+          <ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
+            <Layout>
+              <Clientes />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      /* <Route
         path="/clientes"
         element={
           <ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
