@@ -63,15 +63,32 @@ export interface TypeVehicle {
 }
 export interface ServiceOrder {
   id: number;
-  VehiclesId: number;
-  TypeServiceId: number;
-  StateId: number;
-  EntryDate: Date;
-  ExitDate: Date;
-  IsAuthorized: boolean;
-  ClientMessage: string;
-  UserId: number;
-  User?: User;
+  vehiclesId: number;
+  typeServiceId: number;
+  stateId: number;
+  entryDate: string;
+  exitDate: string;
+  isAuthorized: boolean;
+  clientMessage: string;
+  userId: number;
+  user?: User;
+  vehicle?: Vehicle;
+  invoice?: Invoice;
+  state?: State;
+  typeService?: TypeService;
+}
+
+export interface State {
+  id: number;
+  name: string;
+  serviceOrder?: ServiceOrder;
+}
+
+export interface TypeService {
+  id: number;
+  name: string;
+  duration: number;
+  price: number;
 }
 
 export type EstadoOrden = 'pendiente' | 'en_proceso' | 'completada' | 'cancelada';
