@@ -100,6 +100,13 @@ export function Vehiculos() {
     } else {
       // Create
       await postVehicle(formValues as Vehicle);
+      Swal.fire({
+        icon: 'success',
+        title: 'Creado',
+        text: 'El vehiculo ha sido creado exitosamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
     setShowModal(false);
     // Refresh vehicles list

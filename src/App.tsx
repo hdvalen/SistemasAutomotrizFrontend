@@ -9,6 +9,7 @@ import { HomePage } from './pages/homepages';
 import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { Usuarios } from './pages/Usuarios';
+import { Inventario } from './pages/Inventario';
 /* import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { OrdenesServicio } from './pages/OrdenesServicio';
@@ -62,6 +63,16 @@ function AppRoutes() {
                 <Vehiculos />
               </Layout>
             </ProtectedRoute>} />
+            <Route
+                path="/inventario"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Inventario />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
             <Route
             path="/usuarios"
             element={

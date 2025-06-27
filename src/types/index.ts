@@ -111,18 +111,16 @@ export interface TypeVehicle {
   id: number;
   name: string;
 }
-
 export interface SparePart {
   id: number;
-  Code: string;
-  Description: string;
-  Stock: number;
-  MaxStock: number;
-  MiniStock: number;
-  UnitPrice: number;
-  Category: string;
+  code: string;
+  description: string;
+  stock: number;
+  maxStock: number;
+  miniStock: number;
+  unitPrice: number;
+  category: string;
 }
-
 export interface OrderDetails {
   id: number;
   ServiceOrderId: number;

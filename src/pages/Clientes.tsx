@@ -69,6 +69,13 @@ export function Clientes() {
       }
     } else {
       await postClient(formValues as Client);
+      Swal.fire({
+        icon: 'success',
+        title: 'Creado',
+        text: 'El cliente ha sido creado exitosamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
     setShowModal(false);
     const data = await getClient();

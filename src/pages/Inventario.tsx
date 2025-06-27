@@ -1,121 +1,144 @@
-import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { Plus, Search, Edit, Trash2, AlertTriangle, Package, TrendingDown, TrendingUp } from 'lucide-react';
-import { Repuesto } from '../types';
-
-// Mock data
-const mockRepuestos: Repuesto[] = [
-  {
-    id: '1',
-    codigo: 'FLT-001',
-    nombre: 'Filtro de Aceite Toyota',
-    descripcion: 'Filtro de aceite compatible con motores Toyota 1.6L y 1.8L',
-    categoria: 'Filtros',
-    proveedor: 'AutoPartes SA',
-    stock: 25,
-    stockMinimo: 10,
-    precioCompra: 15000,
-    precioVenta: 25000,
-    createdAt: '2024-01-15T10:30:00Z',
-    updatedAt: '2024-01-15T10:30:00Z',
-  },
-  {
-    id: '2',
-    codigo: 'BRK-002',
-    nombre: 'Pastillas de Freno Delanteras',
-    descripcion: 'Pastillas de freno cerámicas para vehículos compactos',
-    categoria: 'Frenos',
-    proveedor: 'Frenos Premium',
-    stock: 8,
-    stockMinimo: 15,
-    precioCompra: 85000,
-    precioVenta: 140000,
-    createdAt: '2024-01-16T11:15:00Z',
-    updatedAt: '2024-01-16T11:15:00Z',
-  },
-  {
-    id: '3',
-    codigo: 'OIL-003',
-    nombre: 'Aceite Motor 5W-30 Sintético',
-    descripcion: 'Aceite sintético premium para motores modernos',
-    categoria: 'Lubricantes',
-    proveedor: 'Lubricantes Pro',
-    stock: 45,
-    stockMinimo: 20,
-    precioCompra: 35000,
-    precioVenta: 55000,
-    createdAt: '2024-01-17T09:45:00Z',
-    updatedAt: '2024-01-17T09:45:00Z',
-  },
-  {
-    id: '4',
-    codigo: 'SPK-004',
-    nombre: 'Bujías NGK Iridium',
-    descripcion: 'Bujías de iridio de alta durabilidad',
-    categoria: 'Encendido',
-    proveedor: 'Repuestos Eléctricos',
-    stock: 3,
-    stockMinimo: 12,
-    precioCompra: 25000,
-    precioVenta: 40000,
-    createdAt: '2024-01-18T14:20:00Z',
-    updatedAt: '2024-01-18T14:20:00Z',
-  },
-];
-
-const categorias = [...new Set(mockRepuestos.map(r => r.categoria))];
+import { getSpareParts, postSparePart, putSparePart, deleteSparePart } from '../Apis/SparePartApis';
+import type { SparePart } from '../types';
 
 export function Inventario() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [selectedRepuesto, setSelectedRepuesto] = useState<Repuesto | null>(null);
+  const [selectedRepuesto, setSelectedRepuesto] = useState<SparePart | null>(null);
   const [filterCategoria, setFilterCategoria] = useState('');
   const [filterStock, setFilterStock] = useState('');
+  const [repuestos, setRepuestos] = useState<SparePart[]>([]);
+  const [formValues, setFormValues] = useState<Partial<SparePart>>({});
 
-  const filteredRepuestos = mockRepuestos.filter(repuesto => {
-    const matchesSearch = repuesto.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         repuesto.codigo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         repuesto.proveedor.toLowerCase().includes(searchTerm.toLowerCase());
+  useEffect(() => {
+    getSpareParts().then((data) => {
+      if (data) setRepuestos(data);
+    });
+  }, []);
+  
+  const categorias = [...new Set(repuestos.map(r => r.category))];
+
+  const filteredRepuestos = repuestos.filter(repuesto => {
+    const matchesSearch = repuesto.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    repuesto.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    repuesto.stock.toString().includes(searchTerm.toLowerCase());
     
-    const matchesCategoria = filterCategoria === '' || repuesto.categoria === filterCategoria;
+    const matchesCategoria = filterCategoria === '' || repuesto.category === filterCategoria;
     
     const matchesStock = filterStock === '' || 
-                        (filterStock === 'bajo' && repuesto.stock <= repuesto.stockMinimo) ||
-                        (filterStock === 'normal' && repuesto.stock > repuesto.stockMinimo);
+                        (filterStock === 'bajo' && repuesto.stock <= repuesto.miniStock) ||
+                        (filterStock === 'normal' && repuesto.stock > repuesto.miniStock);
     
     return matchesSearch && matchesCategoria && matchesStock;
   });
 
-  const handleEdit = (repuesto: Repuesto) => {
+  const handleEdit = (repuesto: SparePart) => {
     setSelectedRepuesto(repuesto);
+    setFormValues(repuesto);
     setShowModal(true);
   };
 
   const handleCreate = () => {
     setSelectedRepuesto(null);
+    setFormValues({});
     setShowModal(true);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues(prev => ({ ...prev, [name]: value }));
+  };
+
   const getInventarioStats = () => {
-    const totalItems = mockRepuestos.length;
-    const stockBajo = mockRepuestos.filter(r => r.stock <= r.stockMinimo).length;
-    const valorTotal = mockRepuestos.reduce((sum, r) => sum + (r.stock * r.precioCompra), 0);
-    const rotacionAlta = mockRepuestos.filter(r => r.stock > r.stockMinimo * 2).length;
+    const totalItems = repuestos.length;
+    const stockBajo = repuestos.filter(r => r.stock <= r.miniStock).length;
+    const valorTotal = repuestos.reduce((sum, r) => sum + (r.stock * r.unitPrice), 0);
+    const rotacionAlta = repuestos.filter(r => r.stock > r.miniStock * 2).length;
     
     return { totalItems, stockBajo, valorTotal, rotacionAlta };
   };
 
   const stats = getInventarioStats();
 
+  const handleSubmit = async () => {
+    if (selectedRepuesto) {
+      //Edit
+      await putSparePart(formValues as SparePart, selectedRepuesto.id);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Editado',
+        text: 'El repuesto ha sido editado exitosamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    } else {
+      //Create
+      await postSparePart(formValues as SparePart);
+      Swal.fire({
+        icon: 'success',
+        title: 'Creado',
+        text: 'El repuesto ha sido creado exitosamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+    setShowModal(false);
+
+    //Refresh
+    const data = await getSpareParts();
+    if (data) setRepuestos(data);
+  };
+
+  const handleDelete = async (id: number | string) => {
+    const result = await Swal.fire({
+      title: '¿Esta seguro de eliminar el repuesto?',
+      text: "Esta acción no se puede deshacer",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6B7280',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await deleteSparePart(id);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Eliminado',
+          text: 'El repuesto ha sido eliminado exitosamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        const data = await getSpareParts();
+        if (data) setRepuestos(data);
+
+      } catch (error: any) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.message || 'No se pudo eliminar el repuesto.',
+        });
+      }
+    }
+  };
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 bg-clip-text text-transparent">
-            Gestión de Inventario
+            Gestión de Repuestos
           </h1>
           <p className="text-neutral-600 mt-1">Controla el stock de repuestos y materiales</p>
         </div>
@@ -229,7 +252,7 @@ export function Inventario() {
                     Precios
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
-                    Proveedor
+                    Stock Actual
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-bold text-neutral-600 uppercase tracking-wider">
                     Acciones
@@ -245,40 +268,40 @@ export function Inventario() {
                           <Package className="h-6 w-6 text-white" />
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-bold text-neutral-900">{repuesto.nombre}</div>
-                          <div className="text-sm text-neutral-500">Código: {repuesto.codigo}</div>
+                          <div className="text-sm font-bold text-neutral-900">{repuesto.description}</div>
+                          <div className="text-sm text-neutral-500">Código: {repuesto.code}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-accent-100 text-accent-800">
-                        {repuesto.categoria}
+                        {repuesto.category}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="text-sm font-bold text-neutral-900">{repuesto.stock}</div>
-                        {repuesto.stock <= repuesto.stockMinimo && (
+                        {repuesto.stock <= repuesto.miniStock && (
                           <AlertTriangle className="h-4 w-4 text-danger-500 ml-2" />
                         )}
                       </div>
-                      <div className="text-sm text-neutral-500">Mín: {repuesto.stockMinimo}</div>
+                      <div className="text-sm text-neutral-500">Mín: {repuesto.miniStock}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-neutral-900">
-                        <div>Compra: ${repuesto.precioCompra.toLocaleString()}</div>
-                        <div className="font-bold">Venta: ${repuesto.precioVenta.toLocaleString()}</div>
+                        <div>Stock Max: {repuesto.maxStock.toLocaleString()}</div>
+                        <div className="font-bold">Venta: ${repuesto.unitPrice.toLocaleString()}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-neutral-900">{repuesto.proveedor}</div>
+                      <div className="text-sm text-neutral-900"> Stock {repuesto.stock}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end space-x-2">
                         <Button variant="ghost" size="sm" onClick={() => handleEdit(repuesto)} className="hover:bg-primary-50 hover:text-primary-600">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="hover:bg-danger-50 hover:text-danger-600">
+                        <Button variant="ghost" size="sm" className="hover:bg-danger-50 hover:text-danger-600" onClick={() => handleDelete(repuesto.id)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -299,34 +322,19 @@ export function Inventario() {
               {selectedRepuesto ? 'Editar Repuesto' : 'Nuevo Repuesto'}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input label="Código" defaultValue={selectedRepuesto?.codigo} />
-              <Input label="Nombre" defaultValue={selectedRepuesto?.nombre} />
-              <Select label="Categoría" defaultValue={selectedRepuesto?.categoria}>
-                <option value="">Seleccionar categoría</option>
-                {categorias.map(categoria => (
-                  <option key={categoria} value={categoria}>{categoria}</option>
-                ))}
-              </Select>
-              <Input label="Proveedor" defaultValue={selectedRepuesto?.proveedor} />
-              <Input label="Stock Actual" type="number" defaultValue={selectedRepuesto?.stock} />
-              <Input label="Stock Mínimo" type="number" defaultValue={selectedRepuesto?.stockMinimo} />
-              <Input label="Precio Compra" type="number" defaultValue={selectedRepuesto?.precioCompra} />
-              <Input label="Precio Venta" type="number" defaultValue={selectedRepuesto?.precioVenta} />
-              <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-neutral-700 mb-2">Descripción</label>
-                <textarea
-                  className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl shadow-soft placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition-all duration-200"
-                  rows={3}
-                  defaultValue={selectedRepuesto?.descripcion}
-                  placeholder="Descripción detallada del repuesto..."
-                />
-              </div>
+              <Input label="Código" name="code" value={formValues.code || ''} onChange={handleInputChange}/>
+              <Input label="Descripción" name="description" value={formValues.description || ''} onChange={handleInputChange}/>
+              <Input label="Categoria" name="category" value={formValues.category || ''} onChange={handleInputChange}/>
+              <Input label="Stock Actual" type="number" name="stock" value={formValues.stock || 0} onChange={handleInputChange}/>
+              <Input label="Stock Mínimo" type="number" name="miniStock" value={formValues.miniStock || 0} onChange={handleInputChange}/>
+              <Input label="Stock Máximo" type="number" name="maxStock" value={formValues.maxStock || 0} onChange={handleInputChange}/>
+              <Input label="Precio Compra" type="number" name="unitPrice" value={formValues.unitPrice || 0} onChange={handleInputChange}/>
             </div>
             <div className="flex justify-end space-x-3 mt-8">
               <Button variant="outline" onClick={() => setShowModal(false)}>
                 Cancelar
               </Button>
-              <Button onClick={() => setShowModal(false)}>
+              <Button onClick={handleSubmit}>
                 {selectedRepuesto ? 'Actualizar' : 'Crear'}
               </Button>
             </div>
