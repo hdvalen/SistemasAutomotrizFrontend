@@ -1,106 +1,132 @@
-import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { Plus, Search, Edit, Trash2, Eye, UserCheck, UserX, Shield } from 'lucide-react';
-import { User, UserRole } from '../types';
+import type { User, Rol } from '../types';
+import { getUser, postUser, deleteUser, putUser } from '../Apis/UserApis';
+import { getUserRol } from '../Apis/UserRolApis';
+import { getRol } from '../Apis/RolApis';
 
-// Mock data
-const mockUsuarios: User[] = [
-  {
-    id: '1',
-    nombre: 'Juan Pérez',
-    email: 'admin@autotaller.com',
-    telefono: '+1234567890',
-    rol: 'administrador',
-    activo: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '2',
-    nombre: 'María González',
-    email: 'recepcionista@autotaller.com',
-    telefono: '+1234567891',
-    rol: 'recepcionista',
-    activo: true,
-    createdAt: '2024-01-02T00:00:00Z',
-    updatedAt: '2024-01-02T00:00:00Z',
-  },
-  {
-    id: '3',
-    nombre: 'Carlos Rodríguez',
-    email: 'mecanico@autotaller.com',
-    telefono: '+1234567892',
-    rol: 'mecanico',
-    activo: true,
-    createdAt: '2024-01-03T00:00:00Z',
-    updatedAt: '2024-01-03T00:00:00Z',
-  },
-  {
-    id: '4',
-    nombre: 'Ana Martínez',
-    email: 'ana.martinez@autotaller.com',
-    telefono: '+1234567893',
-    rol: 'mecanico',
-    activo: false,
-    createdAt: '2024-01-04T00:00:00Z',
-    updatedAt: '2024-01-04T00:00:00Z',
-  },
-];
+type UserWithRoles = User & { roles?: string[] };
 
-const rolConfig = {
-  administrador: { icon: Shield, color: 'text-danger-600', bg: 'bg-danger-100', label: 'Administrador' },
-  recepcionista: { icon: UserCheck, color: 'text-primary-600', bg: 'bg-primary-100', label: 'Recepcionista' },
-  mecanico: { icon: UserCheck, color: 'text-secondary-600', bg: 'bg-secondary-100', label: 'Mecánico' },
+const getUserRoles = (usuario: UserWithRoles, roles: Rol[]): string => {
+  if (!usuario.roles || usuario.roles.length === 0) return 'Sin rol';
+  return usuario.roles
+    .map(roleId => roles.find(r => String(r.id) === String(roleId))?.description)
+    .filter(Boolean)
+    .join(', ');
 };
 
 export function Usuarios() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedUsuario, setSelectedUsuario] = useState<User | null>(null);
-  const [filterRol, setFilterRol] = useState<UserRole | ''>('');
-  const [filterEstado, setFilterEstado] = useState('');
+  const [usuarios, setUsuarios] = useState<User[]>([]);
+  const [roles, setRoles] = useState<Rol[]>([]);
+  const [formValues, setFormValues] = useState<Partial<User> & { roles?: string[] }>({});
+  const [filterRol, setFilterRol] = useState<string>('');
+  const [userRoles, setUserRoles] = useState<{ userId: number; rolId: number }[]>([]);
 
-  const filteredUsuarios = mockUsuarios.filter(usuario => {
-    const matchesSearch = usuario.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         usuario.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         usuario.telefono.includes(searchTerm);
-    
-    const matchesRol = filterRol === '' || usuario.rol === filterRol;
-    const matchesEstado = filterEstado === '' || 
-                         (filterEstado === 'activo' && usuario.activo) ||
-                         (filterEstado === 'inactivo' && !usuario.activo);
-    
-    return matchesSearch && matchesRol && matchesEstado;
+  useEffect(() => {
+    getUser().then((data) => {
+      if (data) setUsuarios(data);
+    });
+    getRol().then((data) => {
+      if (data) setRoles(data);
+    });
+    getUserRol().then((data) => {
+      if (data) setUserRoles(data);
+    });
+  }, []);
+
+  // Map roles to each user (assuming backend returns user.roles as array of role IDs)
+  const usuariosWithRoles: UserWithRoles[] = usuarios.map(user => ({
+    ...user,
+    roles: userRoles
+      .filter(ur => ur.userId === user.id)
+      .map(ur => String(ur.rolId))
+  }));
+
+  const filteredUsuarios = usuariosWithRoles.filter(usuario => {
+    const matchesSearch = usuario.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      usuario.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      usuario.lastName.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRol = filterRol === '' || (usuario.roles && usuario.roles.includes(filterRol));
+    return matchesSearch && matchesRol;
   });
 
-  const handleEdit = (usuario: User) => {
+  const handleEdit = (usuario: User & { roles?: string[] }) => {
     setSelectedUsuario(usuario);
+    setFormValues({ ...usuario, roles: usuario.roles ? usuario.roles.map(String) : [] });
     setShowModal(true);
   };
 
   const handleCreate = () => {
     setSelectedUsuario(null);
+    setFormValues({});
     setShowModal(true);
   };
 
-  const handleToggleEstado = (usuario: User) => {
-    // Lógica para activar/desactivar usuario
-    console.log('Toggling estado for user:', usuario.id);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues(prev => ({ ...prev, [name]: value }));
   };
 
-  const getUsuariosStats = () => {
-    const totalUsuarios = mockUsuarios.length;
-    const usuariosActivos = mockUsuarios.filter(u => u.activo).length;
-    const administradores = mockUsuarios.filter(u => u.rol === 'administrador').length;
-    const mecanicos = mockUsuarios.filter(u => u.rol === 'mecanico').length;
-    
-    return { totalUsuarios, usuariosActivos, administradores, mecanicos };
+  const handleRolesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedIds = Array.from(e.target.selectedOptions, option => option.value);
+    setFormValues(prev => ({ ...prev, roles: selectedIds }));
   };
 
-  const stats = getUsuariosStats();
+  const handleSubmit = async () => {
+    const payload = {
+      ...formValues,
+      roles: formValues.roles || []
+    };
+    if (selectedUsuario) {
+      await putUser(payload as User, selectedUsuario.id);
+    } else {
+      await postUser(payload as User);
+    }
+    setShowModal(false);
+    const users = await getUser();
+    if (users) setUsuarios(users);
+  };
+
+  const handleDelete = async (id: number | string) => {
+    const result = await Swal.fire({
+      title: '¿Esta seguro de eliminar el usuario?',
+      text: "Esta acción no se puede deshacer",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6B7280',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+    if (result.isConfirmed) {
+      try {
+        await deleteUser(id);
+        Swal.fire({
+          icon: 'success',
+          title: 'Eliminado',
+          text: 'El usuario ha sido eliminado exitosamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        const users = await getUser();
+        if (users) setUsuarios(users);
+      } catch (error: any) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.message || 'No se pudo eliminar el usuario',
+        });
+      }
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -117,61 +143,6 @@ export function Usuarios() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-neutral-600">Total Usuarios</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">{stats.totalUsuarios}</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-primary-500 to-primary-600 shadow-medium">
-                <UserCheck className="h-7 w-7 text-white" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-neutral-600">Activos</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">{stats.usuariosActivos}</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-success-500 to-success-600 shadow-medium">
-                <UserCheck className="h-7 w-7 text-white" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-neutral-600">Administradores</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">{stats.administradores}</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-danger-500 to-danger-600 shadow-medium">
-                <Shield className="h-7 w-7 text-white" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-neutral-600">Mecánicos</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">{stats.mecanicos}</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-secondary-500 to-secondary-600 shadow-medium">
-                <UserCheck className="h-7 w-7 text-white" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -180,16 +151,11 @@ export function Usuarios() {
               Lista de Usuarios
             </CardTitle>
             <div className="flex space-x-4">
-              <Select value={filterRol} onChange={(e) => setFilterRol(e.target.value as UserRole | '')}>
+              <Select value={filterRol} onChange={(e) => setFilterRol(e.target.value)}>
                 <option value="">Todos los roles</option>
-                <option value="administrador">Administrador</option>
-                <option value="recepcionista">Recepcionista</option>
-                <option value="mecanico">Mecánico</option>
-              </Select>
-              <Select value={filterEstado} onChange={(e) => setFilterEstado(e.target.value)}>
-                <option value="">Todos los estados</option>
-                <option value="activo">Activos</option>
-                <option value="inactivo">Inactivos</option>
+                {roles.map(rol => (
+                  <option key={rol.id} value={String(rol.id)}>{rol.description}</option>
+                ))}
               </Select>
               <div className="relative max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-400" />
@@ -215,13 +181,10 @@ export function Usuarios() {
                     Contacto
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                    Username
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
                     Rol
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
-                    Estado
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
-                    Fecha Registro
                   </th>
                   <th className="px-6 py-4 text-right text-xs font-bold text-neutral-600 uppercase tracking-wider">
                     Acciones
@@ -230,53 +193,29 @@ export function Usuarios() {
               </thead>
               <tbody className="bg-white divide-y divide-neutral-200">
                 {filteredUsuarios.map((usuario) => {
-                  const RolIcon = rolConfig[usuario.rol].icon;
                   return (
                     <tr key={usuario.id} className="hover:bg-gradient-to-r hover:from-neutral-50 hover:to-neutral-100 transition-all duration-200">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center shadow-medium">
                             <span className="text-sm font-bold text-white">
-                              {usuario.nombre.split(' ').map(n => n.charAt(0)).join('')}
+                              {usuario.name.split(' ').map(n => n.charAt(0)).join('')}
                             </span>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-bold text-neutral-900">{usuario.nombre}</div>
+                            <div className="text-sm font-bold text-neutral-900">{usuario.name} {usuario.lastName}</div>
                             <div className="text-sm text-neutral-500">ID: {usuario.id}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-semibold text-neutral-900">{usuario.email}</div>
-                        <div className="text-sm text-neutral-500">{usuario.telefono}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold ${rolConfig[usuario.rol].bg} ${rolConfig[usuario.rol].color}`}>
-                          <RolIcon className="h-3 w-3 mr-1" />
-                          {rolConfig[usuario.rol].label}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold ${
-                          usuario.activo 
-                            ? 'bg-success-100 text-success-800' 
-                            : 'bg-neutral-100 text-neutral-800'
-                        }`}>
-                          {usuario.activo ? (
-                            <>
-                              <UserCheck className="h-3 w-3 mr-1" />
-                              Activo
-                            </>
-                          ) : (
-                            <>
-                              <UserX className="h-3 w-3 mr-1" />
-                              Inactivo
-                            </>
-                          )}
-                        </span>
+                        {usuario.userName}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
-                        {new Date(usuario.createdAt).toLocaleDateString('es-ES')}
+                        {getUserRoles(usuario, roles)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center justify-end space-x-2">
@@ -286,15 +225,7 @@ export function Usuarios() {
                           <Button variant="ghost" size="sm" onClick={() => handleEdit(usuario)} className="hover:bg-primary-50 hover:text-primary-600">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => handleToggleEstado(usuario)}
-                            className={usuario.activo ? "hover:bg-warning-50 hover:text-warning-600" : "hover:bg-success-50 hover:text-success-600"}
-                          >
-                            {usuario.activo ? <UserX className="h-4 w-4" /> : <UserCheck className="h-4 w-4" />}
-                          </Button>
-                          <Button variant="ghost" size="sm" className="hover:bg-danger-50 hover:text-danger-600">
+                          <Button variant="ghost" size="sm" className="hover:bg-danger-50 hover:text-danger-600" onClick={() => handleDelete(usuario.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -316,37 +247,28 @@ export function Usuarios() {
               {selectedUsuario ? 'Editar Usuario' : 'Nuevo Usuario'}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input label="Nombre Completo" defaultValue={selectedUsuario?.nombre} />
-              <Input label="Email" type="email" defaultValue={selectedUsuario?.email} />
-              <Input label="Teléfono" defaultValue={selectedUsuario?.telefono} />
-              <Select label="Rol" defaultValue={selectedUsuario?.rol}>
-                <option value="">Seleccionar rol</option>
-                <option value="administrador">Administrador</option>
-                <option value="recepcionista">Recepcionista</option>
-                <option value="mecanico">Mecánico</option>
+              <Input label="Nombre" name="name" value={formValues.name || ''} onChange={handleInputChange} />
+              <Input label="Apellido" name="lastName" value={formValues.lastName || ''} onChange={handleInputChange} />
+              <Input label="Email" name="email" value={formValues.email || ''} onChange={handleInputChange} />
+              <Input label="Username" name="userName" value={formValues.userName || ''} onChange={handleInputChange} />
+              <Input label="Contraseña" name="password" value={formValues.password || ''} onChange={handleInputChange} />
+              <Select
+                multiple
+                label="Roles"
+                name="roles"
+                value={formValues.roles || []}
+                onChange={handleRolesChange}
+              >
+                {roles.map(rol => (
+                  <option key={rol.id} value={rol.id}>{rol.description}</option>
+                ))}
               </Select>
-              {!selectedUsuario && (
-                <>
-                  <Input label="Contraseña" type="password" />
-                  <Input label="Confirmar Contraseña" type="password" />
-                </>
-              )}
-              <div className="md:col-span-2">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    defaultChecked={selectedUsuario?.activo ?? true}
-                    className="rounded border-neutral-300 text-primary-600 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50"
-                  />
-                  <span className="ml-2 text-sm font-semibold text-neutral-700">Usuario activo</span>
-                </label>
-              </div>
             </div>
             <div className="flex justify-end space-x-3 mt-8">
               <Button variant="outline" onClick={() => setShowModal(false)}>
                 Cancelar
               </Button>
-              <Button onClick={() => setShowModal(false)}>
+              <Button onClick={handleSubmit}>
                 {selectedUsuario ? 'Actualizar' : 'Crear'}
               </Button>
             </div>

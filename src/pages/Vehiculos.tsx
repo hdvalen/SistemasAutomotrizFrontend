@@ -1,88 +1,170 @@
-import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { Plus, Search, Edit, Trash2, Eye, Car, Calendar, Wrench } from 'lucide-react';
-import { Vehiculo, Cliente } from '../types';
-
-// Mock data
-const mockClientes: Cliente[] = [
-  { id: '1', nombre: 'Juan', apellido: 'Pérez', email: 'juan.perez@email.com', telefono: '+1234567890', direccion: 'Calle 123 #45-67', createdAt: '2024-01-15T10:30:00Z', updatedAt: '2024-01-15T10:30:00Z' },
-  { id: '2', nombre: 'María', apellido: 'González', email: 'maria.gonzalez@email.com', telefono: '+1234567891', direccion: 'Avenida 456 #78-90', createdAt: '2024-01-16T11:15:00Z', updatedAt: '2024-01-16T11:15:00Z' },
-  { id: '3', nombre: 'Carlos', apellido: 'López', email: 'carlos.lopez@email.com', telefono: '+1234567892', direccion: 'Carrera 789 #12-34', createdAt: '2024-01-17T09:45:00Z', updatedAt: '2024-01-17T09:45:00Z' },
-];
-
-const mockVehiculos: (Vehiculo & { cliente: Cliente })[] = [
-  {
-    id: '1',
-    clienteId: '1',
-    marca: 'Toyota',
-    modelo: 'Corolla',
-    año: 2020,
-    placa: 'ABC-123',
-    vin: '1HGBH41JXMN109186',
-    color: 'Blanco',
-    kilometraje: 45000,
-    cliente: mockClientes[0],
-    createdAt: '2024-01-15T10:30:00Z',
-    updatedAt: '2024-01-15T10:30:00Z',
-  },
-  {
-    id: '2',
-    clienteId: '2',
-    marca: 'Honda',
-    modelo: 'Civic',
-    año: 2019,
-    placa: 'DEF-456',
-    vin: '2HGFC2F59JH123456',
-    color: 'Negro',
-    kilometraje: 62000,
-    cliente: mockClientes[1],
-    createdAt: '2024-01-16T11:15:00Z',
-    updatedAt: '2024-01-16T11:15:00Z',
-  },
-  {
-    id: '3',
-    clienteId: '3',
-    marca: 'Ford',
-    modelo: 'Focus',
-    año: 2021,
-    placa: 'GHI-789',
-    vin: '1FADP3F20FL123456',
-    color: 'Azul',
-    kilometraje: 28000,
-    cliente: mockClientes[2],
-    createdAt: '2024-01-17T09:45:00Z',
-    updatedAt: '2024-01-17T09:45:00Z',
-  },
-];
+import type { Vehicle, Client, TypeVehicle} from '../types';
+import { getVehicle, putVehicle, deleteVehicle, postVehicle } from '../Apis/vehiclesApis';
+import { getClient } from '../Apis/ClientApis';
+import { getTypeVehicle } from '../Apis/TypeVehicleApis';
 
 export function Vehiculos() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [selectedVehiculo, setSelectedVehiculo] = useState<Vehiculo | null>(null);
+  const [selectedVehiculo, setSelectedVehiculo] = useState<Vehicle | null>(null);
+  const [vehiculos, setVehicles] = useState<Vehicle[]>([]);
   const [filterMarca, setFilterMarca] = useState('');
+  const [formValues, setFormValues] = useState<Partial<Vehicle>>({});
+  const [clientes, setClientes] = useState<Client[]>([]);
+  const [typesVehicles, setTypesVehicles] = useState<TypeVehicle[]>([]);
 
-  const filteredVehiculos = mockVehiculos.filter(vehiculo =>
-    (vehiculo.marca.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     vehiculo.modelo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     vehiculo.placa.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     vehiculo.cliente.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     vehiculo.cliente.apellido.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (filterMarca === '' || vehiculo.marca === filterMarca)
+  //Get Clients
+  useEffect(() => {
+    getVehicle().then((data) => {
+      if (data) {
+        setVehicles(data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    getClient().then((data) => {
+      if (data) setClientes(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    getTypeVehicle().then((data) => {
+      if (data) {
+        setTypesVehicles(data);
+      }
+    });
+  }, []);
+
+  const filteredVehiculos = vehiculos.filter(vehiculo =>
+    (vehiculo.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     vehiculo.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     vehiculo.vin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     vehiculo.client?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     vehiculo.client?.lastName.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (filterMarca === '' || vehiculo.brand === filterMarca)
   );
 
-  const marcas = [...new Set(mockVehiculos.map(v => v.marca))];
+  const brands = [...new Set(vehiculos.map(v => v.brand))];
 
-  const handleEdit = (vehiculo: Vehiculo) => {
+  const handleEdit = (vehiculo: Vehicle) => {
     setSelectedVehiculo(vehiculo);
+    setFormValues(vehiculo);
     setShowModal(true);
   };
 
   const handleCreate = () => {
     setSelectedVehiculo(null);
+    setFormValues({});
     setShowModal(true);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      setFormValues(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    if (selectedVehiculo) {
+       try {
+        const response = await putVehicle(formValues as Vehicle, selectedVehiculo.id);
+  
+        if(!response || !response.ok) {
+          throw new Error(`Error: revise ordenes de servicio ACTIVAS`);
+        }
+  
+        Swal.fire({
+            icon: 'success',
+            title: 'Editado',
+            text: 'El vehiculo ha sido editado exitosamente',
+            showConfirmButton: false,
+            timer: 1500
+          });
+  
+        const data = await getVehicle();
+        if (data) setVehicles(data);
+      } catch (error: any) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.message || 'No se pudo editar el vehículo, revise ordenes de servicio activas.',
+        });
+      }
+    } else {
+      // Create
+      await postVehicle(formValues as Vehicle);
+    }
+    setShowModal(false);
+    // Refresh vehicles list
+    const data = await getVehicle();
+    if (data) setVehicles(data);
+  };
+
+  const handleDelete = async (id: number | string) => {
+    const result = await Swal.fire({
+      title: '¿Esta seguro de eliminar el vehiculo?',
+      text: "Esta acción no se puede deshacer",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6B7280',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await deleteVehicle(id);
+
+        if (!response || !response.ok) {
+          throw new Error(`Error: revise ordenes de servicio ACTIVAS`);
+        }
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Eliminado',
+          text: 'El vehiculo ha sido eliminado exitosamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        const data = await getVehicle();
+        if (data) setVehicles(data);
+
+      } catch (error: any) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error.message || 'No se pudo eliminar el vehiculo, revise ordenes de servicio activas.',
+        });
+      }
+    }
+  };
+
+  // Función para obtener el nombre del cliente
+  const getClientName = (clientId: number): string => {
+    const client = clientes.find(c => c.id === clientId);
+    return client ? `${client.name} ${client.lastName}` : 'N/A';
+  };
+
+  // Función para obtener el nombre del tipo de vehículo
+  const getTypeVehicleName = (typeVehicleId: number) => {
+    const type = typesVehicles.find(t => t.id === Number(typeVehicleId));
+    return type ? type.name : 'N/A';
+  };
+
+  const averageMileage = (vehiculos: Vehicle[]): number => {
+    if (vehiculos.length === 0) return 0;
+
+    const totalMileage = vehiculos.reduce((sum, v) => sum + v.mileage, 0);
+    return totalMileage / vehiculos.length;
   };
 
   return (
@@ -106,7 +188,7 @@ export function Vehiculos() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-neutral-600">Total Vehículos</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">{mockVehiculos.length}</p>
+                <p className="text-3xl font-bold text-neutral-900 mt-1">{vehiculos.length}</p>
               </div>
               <div className="p-4 rounded-2xl bg-gradient-to-r from-primary-500 to-primary-600 shadow-medium">
                 <Car className="h-7 w-7 text-white" />
@@ -118,34 +200,8 @@ export function Vehiculos() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-neutral-600">En Taller</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">5</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-warning-500 to-warning-600 shadow-medium">
-                <Wrench className="h-7 w-7 text-white" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-neutral-600">Mantenimiento</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">12</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-secondary-500 to-secondary-600 shadow-medium">
-                <Calendar className="h-7 w-7 text-white" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
                 <p className="text-sm font-semibold text-neutral-600">Km Promedio</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">45K</p>
+                <p className="text-3xl font-bold text-neutral-900 mt-1">{averageMileage(vehiculos)}</p>
               </div>
               <div className="p-4 rounded-2xl bg-gradient-to-r from-accent-500 to-accent-600 shadow-medium">
                 <Eye className="h-7 w-7 text-white" />
@@ -165,8 +221,8 @@ export function Vehiculos() {
             <div className="flex space-x-4">
               <Select value={filterMarca} onChange={(e) => setFilterMarca(e.target.value)}>
                 <option value="">Todas las marcas</option>
-                {marcas.map(marca => (
-                  <option key={marca} value={marca}>{marca}</option>
+                {brands.map(brand => (
+                  <option key={brand} value={brand}>{brand}</option>
                 ))}
               </Select>
               <div className="relative max-w-md">
@@ -213,27 +269,31 @@ export function Vehiculos() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-bold text-neutral-900">
-                            {vehiculo.marca} {vehiculo.modelo}
+                            {vehiculo.brand} • {vehiculo.model}
                           </div>
                           <div className="text-sm text-neutral-500">
-                            {vehiculo.año} • {vehiculo.placa}
+                            {vehiculo.vin} 
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-semibold text-neutral-900">
-                        {vehiculo.cliente.nombre} {vehiculo.cliente.apellido}
+                        {getClientName(vehiculo.clientId)}
                       </div>
-                      <div className="text-sm text-neutral-500">{vehiculo.cliente.telefono}</div>
+                      <div className="text-sm text-neutral-500">
+                        {clientes.find(c => c.id === vehiculo.clientId)?.phone || 'N/A'}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-neutral-900">Color: {vehiculo.color}</div>
+                      <div className="text-sm text-neutral-900">
+                        Tipo: {getTypeVehicleName(vehiculo.typeVehicleId)}
+                      </div>
                       <div className="text-sm text-neutral-500">VIN: {vehiculo.vin.slice(-8)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-bold text-neutral-900">
-                        {vehiculo.kilometraje.toLocaleString()} km
+                        {vehiculo.mileage.toLocaleString()} km
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -244,7 +304,7 @@ export function Vehiculos() {
                         <Button variant="ghost" size="sm" onClick={() => handleEdit(vehiculo)} className="hover:bg-primary-50 hover:text-primary-600">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="hover:bg-danger-50 hover:text-danger-600">
+                        <Button variant="ghost" size="sm" className="hover:bg-danger-50 hover:text-danger-600" onClick={() => handleDelete(vehiculo.id)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -265,27 +325,48 @@ export function Vehiculos() {
               {selectedVehiculo ? 'Editar Vehículo' : 'Nuevo Vehículo'}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Select label="Cliente" defaultValue={selectedVehiculo?.clienteId}>
+              <Select
+                label="Cliente"
+                name="clientId"
+                value={formValues.clientId || ''}
+                onChange={e => setFormValues(prev => ({
+                  ...prev,
+                  clientId: Number(e.target.value)
+                }))}
+              >
                 <option value="">Seleccionar cliente</option>
-                {mockClientes.map(cliente => (
+                {clientes.map(cliente => (
                   <option key={cliente.id} value={cliente.id}>
-                    {cliente.nombre} {cliente.apellido}
+                    {cliente.name} {cliente.lastName}
                   </option>
                 ))}
               </Select>
-              <Input label="Marca" defaultValue={selectedVehiculo?.marca} />
-              <Input label="Modelo" defaultValue={selectedVehiculo?.modelo} />
-              <Input label="Año" type="number" defaultValue={selectedVehiculo?.año} />
-              <Input label="Placa" defaultValue={selectedVehiculo?.placa} />
-              <Input label="Color" defaultValue={selectedVehiculo?.color} />
-              <Input label="VIN" defaultValue={selectedVehiculo?.vin} className="md:col-span-2" />
-              <Input label="Kilometraje" type="number" defaultValue={selectedVehiculo?.kilometraje} />
+              <Input label="Marca" name="brand" value={formValues.brand || ''} onChange={handleInputChange}/>
+              <Input label="Modelo" name="model" value={formValues.model || ''} onChange={handleInputChange} />
+              <Input label="VIN" name="vin" value={formValues.vin || ''} onChange={handleInputChange}  />
+              <Input label="Kilometraje" type="number" name="mileage" value={formValues.mileage || ''} onChange={handleInputChange}/>
+              <Select 
+                label="Tipo Vehiculo" 
+                name="typeVehicleId"
+                value={formValues.typeVehicleId || ''} 
+                onChange={e => setFormValues(prev => ({
+                  ...prev,
+                  typeVehicleId: Number(e.target.value)
+                }))}
+              >
+                <option value="">Seleccionar tipo vehículo</option>
+                {typesVehicles.map(type => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
+                ))}
+              </Select>
             </div>
             <div className="flex justify-end space-x-3 mt-8">
               <Button variant="outline" onClick={() => setShowModal(false)}>
                 Cancelar
               </Button>
-              <Button onClick={() => setShowModal(false)}>
+              <Button onClick={handleSubmit}>
                 {selectedVehiculo ? 'Actualizar' : 'Crear'}
               </Button>
             </div>

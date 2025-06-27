@@ -1,14 +1,23 @@
 export interface User {
   id: number;
-  Name: string;
-  LastName: string;
-  UserName: string;
-  Email: string;
-  Password: string;
+  name: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
 }
 export type UserRol = {
-  UserId: number;
-  RolId: number;
+  userId: number;
+  rolId: number;
+}
+
+export interface Rol {
+  id: number;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AuthState {
@@ -34,18 +43,17 @@ export interface Client {
 
 export interface Vehicle {
   id: number;
-  client_id: number;
+  clientId: number;
   brand: string;
   model: string;
   vin: string;
   mileage: number;
-  type_vehicle_id: number;
+  typeVehicleId: number;
   client?: Client;
   typeVehicle?: TypeVehicle;
   createdAt: string;
   updatedAt: string;
 }
-
 export interface TypeVehicle {
   id: number;
   name: string;
