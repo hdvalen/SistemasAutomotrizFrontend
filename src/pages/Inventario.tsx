@@ -160,270 +160,263 @@ export function Inventario() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="bg-gray-900 border-gray-800">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-gray-400">Total Items</p>
-                  <p className="text-3xl font-bold text-white mt-1">{stats.totalItems}</p>
-                </div>
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg">
-                  <Package className="h-7 w-7 text-white" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-gray-900 border-gray-800">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-gray-400">Stock Bajo</p>
-                  <p className="text-3xl font-bold text-white mt-1">{stats.stockBajo}</p>
-                </div>
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 shadow-lg">
-                  <AlertTriangle className="h-7 w-7 text-white" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-gray-900 border-gray-800">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-gray-400">Valor Total</p>
-                  <p className="text-3xl font-bold text-white mt-1">${(stats.valorTotal / 1000000).toFixed(1)}M</p>
-                </div>
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 shadow-lg">
-                  <TrendingUp className="h-7 w-7 text-white" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="bg-gray-900 border-gray-800">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-gray-400">Alta Rotación</p>
-                  <p className="text-3xl font-bold text-white mt-1">{stats.rotacionAlta}</p>
-                </div>
-                <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-500 to-purple-600 shadow-lg">
-                  <TrendingDown className="h-7 w-7 text-white" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+  <Card className="bg-zinc-900 border border-zinc-800 shadow-lg">
+    <CardContent className="p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-zinc-400">Total Items</p>
+          <p className="text-3xl font-bold text-white mt-1">{stats.totalItems}</p>
         </div>
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
+          <Package className="h-7 w-7 text-white" />
+        </div>
+      </div>
+    </CardContent>
+  </Card>
 
-        <Card className="bg-gray-900 border-gray-800">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center text-white">
-                <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                Inventario de Repuestos
-              </CardTitle>
-              <div className="flex space-x-4">
-                <Select 
-                  value={filterCategoria} 
-                  onChange={(e) => setFilterCategoria(e.target.value)}
-                  className="bg-gray-800 border-gray-700 text-white"
-                >
-                  <option value="">Todas las categorías</option>
-                  {categorias.map(categoria => (
-                    <option key={categoria} value={categoria}>{categoria}</option>
-                  ))}
-                </Select>
-                <Select 
-                  value={filterStock} 
-                  onChange={(e) => setFilterStock(e.target.value)}
-                  className="bg-gray-800 border-gray-700 text-white"
-                >
-                  <option value="">Todo el stock</option>
-                  <option value="bajo">Stock bajo</option>
-                  <option value="normal">Stock normal</option>
-                </Select>
-                <div className="relative max-w-md">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    placeholder="Buscar repuestos..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-gray-800 border-gray-700 text-white placeholder-gray-400"
-                  />
+  <Card className="bg-zinc-900 border border-zinc-800 shadow-lg">
+    <CardContent className="p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-zinc-400">Stock Bajo</p>
+          <p className="text-3xl font-bold text-white mt-1">{stats.stockBajo}</p>
+        </div>
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 shadow-lg">
+          <AlertTriangle className="h-7 w-7 text-white" />
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+
+  <Card className="bg-zinc-900 border border-zinc-800 shadow-lg">
+    <CardContent className="p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-zinc-400">Valor Total</p>
+          <p className="text-3xl font-bold text-white mt-1">${(stats.valorTotal / 1000000).toFixed(1)}M</p>
+        </div>
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg">
+          <TrendingUp className="h-7 w-7 text-white" />
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+
+  <Card className="bg-zinc-900 border border-zinc-800 shadow-lg">
+    <CardContent className="p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-zinc-400">Alta Rotación</p>
+          <p className="text-3xl font-bold text-white mt-1">{stats.rotacionAlta}</p>
+        </div>
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg">
+          <TrendingDown className="h-7 w-7 text-white" />
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+</div>
+
+
+        <Card className="bg-zinc-900 border border-zinc-800 shadow-lg">
+  <CardHeader>
+    <div className="flex items-center justify-between">
+      <CardTitle className="flex items-center text-white">
+        <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mr-3" />
+        Inventario de Repuestos
+      </CardTitle>
+      <div className="flex space-x-4">
+        <Select 
+          value={filterCategoria} 
+          onChange={(e) => setFilterCategoria(e.target.value)}
+          className="bg-zinc-800 border-zinc-700 text-white"
+        >
+          <option value="">Todas las categorías</option>
+          {categorias.map(categoria => (
+            <option key={categoria} value={categoria}>{categoria}</option>
+          ))}
+        </Select>
+        <Select 
+          value={filterStock} 
+          onChange={(e) => setFilterStock(e.target.value)}
+          className="bg-zinc-800 border-zinc-700 text-white"
+        >
+          <option value="">Todo el stock</option>
+          <option value="bajo">Stock bajo</option>
+          <option value="normal">Stock normal</option>
+        </Select>
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="Buscar repuestos..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 bg-zinc-800 border-zinc-700 text-white placeholder-gray-400"
+          />
+        </div>
+      </div>
+    </div>
+  </CardHeader>
+  <CardContent>
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-zinc-700">
+        <thead className="bg-gradient-to-r from-zinc-800 to-zinc-900">
+          <tr>
+            {['Repuesto', 'Categoría', 'Stock', 'Precios', 'Stock Actual', 'Acciones'].map((col) => (
+              <th key={col} className="px-6 py-4 text-left text-xs font-bold text-zinc-300 uppercase tracking-wider">
+                {col}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-zinc-900 divide-y divide-zinc-800">
+          {filteredRepuestos.map((repuesto) => (
+            <tr key={repuesto.id} className="hover:bg-gradient-to-r hover:from-zinc-800 hover:to-zinc-700 transition-all duration-200">
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="flex items-center">
+                  <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center shadow-md">
+                    <Package className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="ml-4">
+                    <div className="text-sm font-bold text-white">{repuesto.description}</div>
+                    <div className="text-sm text-zinc-400">Código: {repuesto.code}</div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-700">
-                <thead className="bg-gradient-to-r from-gray-800 to-gray-900">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      Repuesto
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      Categoría
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      Stock
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      Precios
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      Stock Actual
-                    </th>
-                    <th className="px-6 py-4 text-right text-xs font-bold text-gray-300 uppercase tracking-wider">
-                      Acciones
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-gray-900 divide-y divide-gray-800">
-                  {filteredRepuestos.map((repuesto) => (
-                    <tr key={repuesto.id} className="hover:bg-gradient-to-r hover:from-gray-800 hover:to-gray-700 transition-all duration-200">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
-                            <Package className="h-6 w-6 text-white" />
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-bold text-white">{repuesto.description}</div>
-                            <div className="text-sm text-gray-400">Código: {repuesto.code}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-blue-900 text-blue-200 border border-blue-700">
-                          {repuesto.category}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="text-sm font-bold text-white">{repuesto.stock}</div>
-                          {repuesto.stock <= repuesto.miniStock && (
-                            <AlertTriangle className="h-4 w-4 text-red-500 ml-2" />
-                          )}
-                        </div>
-                        <div className="text-sm text-gray-400">Mín: {repuesto.miniStock}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-300">
-                          <div>Stock Max: {repuesto.maxStock.toLocaleString()}</div>
-                          <div className="font-bold text-white">Venta: ${repuesto.unitPrice.toLocaleString()}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-white"> Stock {repuesto.stock}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex items-center justify-end space-x-2">
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={() => handleEdit(repuesto)} 
-                            className="hover:bg-blue-900 hover:text-blue-300 text-gray-400"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="hover:bg-red-900 hover:text-red-300 text-gray-400" 
-                            onClick={() => handleDelete(repuesto.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-purple-900 text-purple-200 border border-purple-700">
+                  {repuesto.category}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="flex items-center">
+                  <div className="text-sm font-bold text-white">{repuesto.stock}</div>
+                  {repuesto.stock <= repuesto.miniStock && (
+                    <AlertTriangle className="h-4 w-4 text-red-500 ml-2" />
+                  )}
+                </div>
+                <div className="text-sm text-zinc-400">Mín: {repuesto.miniStock}</div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm text-zinc-300">
+                  <div>Stock Max: {repuesto.maxStock.toLocaleString()}</div>
+                  <div className="font-bold text-white">Venta: ${repuesto.unitPrice.toLocaleString()}</div>
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
+                Stock {repuesto.stock}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-right">
+                <div className="flex items-center justify-end space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => handleEdit(repuesto)} 
+                    className="hover:bg-blue-900 hover:text-blue-300 text-zinc-400"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => handleDelete(repuesto.id)}
+                    className="hover:bg-red-900 hover:text-red-300 text-zinc-400"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </CardContent>
+</Card>
+
 
         {/* Modal */}
         {showModal && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-gray-900 rounded-2xl p-8 w-full max-w-2xl shadow-2xl border border-gray-700 max-h-[90vh] overflow-y-auto">
-              <h2 className="text-xl font-bold text-white mb-6">
-                {selectedRepuesto ? 'Editar Repuesto' : 'Nuevo Repuesto'}
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input 
-                  label="Código" 
-                  name="code" 
-                  value={formValues.code || ''} 
-                  onChange={handleInputChange}
-                  className="bg-gray-800 border-gray-700 text-white"
-                />
-                <Input 
-                  label="Descripción" 
-                  name="description" 
-                  value={formValues.description || ''} 
-                  onChange={handleInputChange}
-                  className="bg-gray-800 border-gray-700 text-white"
-                />
-                <Input 
-                  label="Categoria" 
-                  name="category" 
-                  value={formValues.category || ''} 
-                  onChange={handleInputChange}
-                  className="bg-gray-800 border-gray-700 text-white"
-                />
-                <Input 
-                  label="Stock Actual" 
-                  type="number" 
-                  name="stock" 
-                  value={formValues.stock || 0} 
-                  onChange={handleInputChange}
-                  className="bg-gray-800 border-gray-700 text-white"
-                />
-                <Input 
-                  label="Stock Mínimo" 
-                  type="number" 
-                  name="miniStock" 
-                  value={formValues.miniStock || 0} 
-                  onChange={handleInputChange}
-                  className="bg-gray-800 border-gray-700 text-white"
-                />
-                <Input 
-                  label="Stock Máximo" 
-                  type="number" 
-                  name="maxStock" 
-                  value={formValues.maxStock || 0} 
-                  onChange={handleInputChange}
-                  className="bg-gray-800 border-gray-700 text-white"
-                />
-                <Input 
-                  label="Precio Compra" 
-                  type="number" 
-                  name="unitPrice" 
-                  value={formValues.unitPrice || 0} 
-                  onChange={handleInputChange}
-                  className="bg-gray-800 border-gray-700 text-white"
-                />
-              </div>
-              <div className="flex justify-end space-x-3 mt-8">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setShowModal(false)}
-                  className="border-gray-600 text-gray-300 hover:bg-gray-800"
-                >
-                  Cancelar
-                </Button>
-                <Button 
-                  onClick={handleSubmit}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                >
-                  {selectedRepuesto ? 'Actualizar' : 'Crear'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-white rounded-2xl p-8 w-full max-w-2xl shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto">
+      <h2 className="text-xl font-bold text-gray-800 mb-6">
+        {selectedRepuesto ? 'Editar Repuesto' : 'Nuevo Repuesto'}
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Input 
+          label="Código" 
+          name="code" 
+          value={formValues.code || ''} 
+          onChange={handleInputChange}
+          className="bg-white border-gray-300 text-gray-800"
+        />
+        <Input 
+          label="Descripción" 
+          name="description" 
+          value={formValues.description || ''} 
+          onChange={handleInputChange}
+          className="bg-white border-gray-300 text-gray-800"
+        />
+        <Input 
+          label="Categoria" 
+          name="category" 
+          value={formValues.category || ''} 
+          onChange={handleInputChange}
+          className="bg-white border-gray-300 text-gray-800"
+        />
+        <Input 
+          label="Stock Actual" 
+          type="number" 
+          name="stock" 
+          value={formValues.stock || 0} 
+          onChange={handleInputChange}
+          className="bg-white border-gray-300 text-gray-800"
+        />
+        <Input 
+          label="Stock Mínimo" 
+          type="number" 
+          name="miniStock" 
+          value={formValues.miniStock || 0} 
+          onChange={handleInputChange}
+          className="bg-white border-gray-300 text-gray-800"
+        />
+        <Input 
+          label="Stock Máximo" 
+          type="number" 
+          name="maxStock" 
+          value={formValues.maxStock || 0} 
+          onChange={handleInputChange}
+          className="bg-white border-gray-300 text-gray-800"
+        />
+        <Input 
+          label="Precio Compra" 
+          type="number" 
+          name="unitPrice" 
+          value={formValues.unitPrice || 0} 
+          onChange={handleInputChange}
+          className="bg-white border-gray-300 text-gray-800"
+        />
+      </div>
+      <div className="flex justify-end space-x-3 mt-8">
+        <Button 
+          variant="outline" 
+          onClick={() => setShowModal(false)}
+          className="border-gray-400 text-gray-600 hover:bg-gray-100"
+        >
+          Cancelar
+        </Button>
+        <Button 
+          onClick={handleSubmit}
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+        >
+          {selectedRepuesto ? 'Actualizar' : 'Crear'}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );
