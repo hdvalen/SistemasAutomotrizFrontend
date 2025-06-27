@@ -10,6 +10,7 @@ import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { Usuarios } from './pages/Usuarios';
 import { Inventario } from './pages/Inventario';
+import { OrdenesServicio } from './pages/OrdenesServicio';
 /* import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { OrdenesServicio } from './pages/OrdenesServicio';
@@ -83,6 +84,16 @@ function AppRoutes() {
               </ProtectedRoute>
             }
           />
+            <Route
+          path="/ordenes"
+          element={
+            <ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
+              <Layout>
+                <OrdenesServicio />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
           </>
 
       /* <Route
