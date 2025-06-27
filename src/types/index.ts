@@ -161,3 +161,27 @@ export interface Diagnostic {
   Description: string;
   Date: Date;
 }
+
+export interface DetailInspection {
+  id: number;
+  ServiceOrderId: number;
+  InspectionId: number;
+  Quantity: number;
+}
+
+export interface Inspection {
+  id: number;
+  Name: string;
+}
+
+export interface Specialization {
+  id: number;
+  Name: string;
+}
+
+export interface TypeService {
+  id: number;
+  Name: string;
+  Duration: number;
+  Price: number;
+}
