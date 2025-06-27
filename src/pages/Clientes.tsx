@@ -46,49 +46,43 @@ export function Clientes() {
 
   const handleSubmit = async () => {
     if (selectedCliente) {
-      // Edit
       try {
         const response = await putClient(formValues as Client, selectedCliente.id);
-  
-        if(!response || !response.ok) {
-          throw new Error(`Error: revise ordenes de servicio ACTIVAS`);
-        }
-  
+        if (!response || !response.ok) throw new Error(`Error: revise ordenes de servicio ACTIVAS`);
+
         Swal.fire({
-            icon: 'success',
-            title: 'Editado',
-            text: 'El cliente ha sido editado exitosamente',
-            showConfirmButton: false,
-            timer: 1500
-          });
-  
+          icon: 'success',
+          title: 'Editado',
+          text: 'El cliente ha sido editado exitosamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+
         const data = await getClient();
         if (data) setClientes(data);
       } catch (error: any) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: error.message || 'No se pudo editar el cliente, revise ordenes de servicio activas.',
+          text: error.message || 'No se pudo editar el cliente.',
         });
       }
     } else {
-      // Create
       await postClient(formValues as Client);
     }
     setShowModal(false);
-    // Refresh client list
     const data = await getClient();
     if (data) setClientes(data);
   };
 
   const handleDelete = async (id: number | string) => {
     const result = await Swal.fire({
-      title: '¿Esta seguro de eliminar el cliente?',
-      text: "Esta acción no se puede deshacer",
+      title: '¿Eliminar cliente?',
+      text: "No podrás revertir esto",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#dc2626',
-      cancelButtonColor: '#6B7280',
+      confirmButtonColor: '#7c3aed',
+      cancelButtonColor: '#9ca3af',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     });
@@ -96,161 +90,146 @@ export function Clientes() {
     if (result.isConfirmed) {
       try {
         const response = await deleteClient(id);
-
-        if (!response || !response.ok) {
-          throw new Error(`Error: revise ordenes de servicio ACTIVAS`);
-        }
+        if (!response || !response.ok) throw new Error(`Error: revise ordenes de servicio ACTIVAS`);
 
         Swal.fire({
           icon: 'success',
           title: 'Eliminado',
-          text: 'El cliente ha sido eliminado exitosamente',
+          text: 'Cliente eliminado exitosamente',
           showConfirmButton: false,
           timer: 1500
         });
 
         const data = await getClient();
         if (data) setClientes(data);
-
       } catch (error: any) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: error.message || 'No se pudo eliminar el cliente, revise ordenes de servicio activas.',
+          text: error.message || 'No se pudo eliminar el cliente.',
         });
       }
     }
   };
+
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 bg-clip-text text-transparent">
-            Gestión de Clientes
-          </h1>
-          <p className="text-neutral-600 mt-1">Administra la información de tus clientes</p>
-        </div>
-        <Button onClick={handleCreate} className="shadow-medium">
-          <Plus className="h-4 w-4 mr-2" />
-          Nuevo Cliente
-        </Button>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center">
-              <div className="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
-              Lista de Clientes
-            </CardTitle>
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-400" />
-              <Input
-                placeholder="Buscar clientes..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
+     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Encabezado */}
+        <div className="flex items-center justify-between bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+              Gestión de Clientes
+            </h1>
+            <p className="text-gray-600 mt-2 text-lg">Administra la información de tus clientes</p>
           </div>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-neutral-200">
-              <thead className="bg-gradient-to-r from-neutral-50 to-neutral-100">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
-                    Cliente
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
-                    Contacto
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
-                    Fecha de Nacimiento
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
-                    Identificación
-                  </th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-neutral-600 uppercase tracking-wider">
-                    Acciones
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-neutral-200">
-                {filteredClientes.map((cliente) => (
-                  <tr key={cliente.id} className="hover:bg-gradient-to-r hover:from-neutral-50 hover:to-neutral-100 transition-all duration-200">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center shadow-medium">
-                          <span className="text-sm font-bold text-white">
-                            {cliente.name.charAt(0)}{cliente.lastName.charAt(0)}
-                          </span>
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-bold text-neutral-900">
-                            {cliente.name} {cliente.lastName}
-                          </div>
-                          <div className="text-sm text-neutral-500">ID: {cliente.id}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-semibold text-neutral-900">{cliente.email}</div>
-                      <div className="text-sm text-neutral-500">{cliente.phone}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-neutral-900">{cliente.birth}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
-                      {cliente.identification}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center justify-end space-x-2">
-                        <Button variant="ghost" size="sm" className="hover:bg-accent-50 hover:text-accent-600">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleEdit(cliente)} className="hover:bg-primary-50 hover:text-primary-600">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="hover:bg-danger-50 hover:text-danger-600" onClick={() => handleDelete(cliente.id)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </td>
+          <Button onClick={handleCreate} className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105">
+            <Plus className="h-5 w-5 mr-2" />
+            Nuevo Cliente
+          </Button>
+        </div>
+
+        {/* Tabla de Clientes */}
+        <Card className="bg-white border border-gray-200 shadow-xl">
+          <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-gray-200">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <CardTitle className="flex items-center text-xl font-bold text-gray-900">
+                <div className="w-3 h-3 bg-blue-500 rounded-full mr-3" />
+                Lista de Clientes
+              </CardTitle>
+              <div className="relative w-full sm:w-auto">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-purple-400" />
+                <Input
+                  placeholder="Buscar clientes..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-4 py-2 border-purple-300 focus:border-purple-500 focus:ring-purple-500 rounded-lg w-full sm:w-64"
+                />
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gradient-to-r from-indigo-100 to-purple-100">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Cliente</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Contacto</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Nacimiento</th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Identificación</th>
+                    <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">Acciones</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {filteredClientes.map((cliente) => (
+                    <tr key={cliente.id} className="hover:bg-indigo-50 transition">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white flex items-center justify-center shadow">
+                            <span className="text-sm font-bold">
+                              {cliente.name.charAt(0)}{cliente.lastName.charAt(0)}
+                            </span>
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-bold text-gray-900">{cliente.name} {cliente.lastName}</div>
+                            <div className="text-sm text-gray-500">ID: {cliente.id}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-semibold text-gray-900">{cliente.email}</div>
+                        <div className="text-sm text-gray-500">{cliente.phone}</div>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">{cliente.birth}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{cliente.identification}</td>
+                      <td className="px-6 py-4 text-right whitespace-nowrap">
+                        <div className="flex justify-end space-x-2">
+                          <Button variant="ghost" size="sm" className="hover:bg-purple-100 text-purple-600">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" onClick={() => handleEdit(cliente)} className="hover:bg-indigo-100 text-indigo-600">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" onClick={() => handleDelete(cliente.id)} className="hover:bg-red-100 text-red-600">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* Modal placeholder - en una implementación real usarías un modal component */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-strong border border-neutral-200">
-            <h2 className="text-xl font-bold text-neutral-900 mb-6">
-              {selectedCliente ? 'Editar Cliente' : 'Nuevo Cliente'}
-            </h2>
-            <div className="space-y-4">
-              <Input label="Nombre" name="name" value={formValues.name || ''} onChange={handleInputChange}/>
-              <Input label="Apellido" name="lastName" value={formValues.lastName || ''} onChange={handleInputChange}/>
-              <Input label="Email" type="email" name="email" value={formValues.email || ''} onChange={handleInputChange}/>
-              <Input label="Teléfono" name="phone" value={formValues.phone || ''} onChange={handleInputChange}/>
-              <Input label="Identification" name="identification" value={formValues.identification || ''} onChange={handleInputChange}/>
-              <Input label="Fecha de Nacimiento" type="date" name="birth" value={formValues.birth || ''} onChange={handleInputChange}/>
-            </div>
-            <div className="flex justify-end space-x-3 mt-8">
-              <Button variant="outline" onClick={() => setShowModal(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={handleSubmit}>
-                {selectedCliente ? 'Actualizar' : 'Crear'}
-              </Button>
+        {/* Modal */}
+        {showModal && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl p-8 w-full max-w-xl shadow-[0_15px_60px_rgba(0,0,0,0.3)] border border-gray-200 max-h-[90vh] overflow-y-auto transition-all duration-300 scale-100">
+              <h2 className="text-2xl font-bold text-indigo-700 mb-6">
+                {selectedCliente ? 'Editar Cliente' : 'Nuevo Cliente'}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Input label="Nombre" name="name" value={formValues.name || ''} onChange={handleInputChange} />
+                <Input label="Apellido" name="lastName" value={formValues.lastName || ''} onChange={handleInputChange} />
+                <Input label="Email" type="email" name="email" value={formValues.email || ''} onChange={handleInputChange} />
+                <Input label="Teléfono" name="phone" value={formValues.phone || ''} onChange={handleInputChange} />
+                <Input label="Identificación" name="identification" value={formValues.identification || ''} onChange={handleInputChange} />
+                <Input label="Nacimiento" type="date" name="birth" value={formValues.birth || ''} onChange={handleInputChange} />
+              </div>
+              <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
+                <Button variant="outline" onClick={() => setShowModal(false)} className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 rounded-lg transition-colors duration-150">
+                  Cancelar
+                </Button>
+                <Button onClick={handleSubmit} className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                  {selectedCliente ? 'Actualizar' : 'Crear'}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

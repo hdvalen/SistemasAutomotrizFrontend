@@ -1,4 +1,5 @@
 export interface User {
+  isActive: unknown;
   id: number;
   name: string;
   lastName: string;
