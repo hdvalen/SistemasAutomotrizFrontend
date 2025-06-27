@@ -136,3 +136,11 @@ export interface Auditory {
   ChangeBy: string;
   Date: Date;
 }
+
+export interface Diagnostic {
+  id: number;
+  UserId: number;
+  User: User;
+  Description: string;
+  Date: Date;
+}

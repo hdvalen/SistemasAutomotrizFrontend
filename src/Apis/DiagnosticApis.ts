@@ -1,26 +1,26 @@
-import type { Auditory } from "../types";
+import type { Diagnostic } from "../types";
 
 const URL_API = "http://localhost:5070";
 const myHeaders = new Headers({
     "Content-Type": "application/json"
 });
 
-export const getAuditory = async (): Promise<Auditory[] | null> => {
+export const getDiagnostic = async (): Promise<Diagnostic[] | null> => {
     try {
-        const response = await fetch(`${URL_API}/api/Auditory`, {
+        const response = await fetch(`${URL_API}/api/Diagnostic`, {
             method: 'GET',
             headers: myHeaders
         });
 
         switch (response.status) {
             case 200:
-                const data: Auditory[] = await response.json();
+                const data: Diagnostic[] = await response.json();
                 return data;
             case 401:
                 console.error("No autorizado o token inválido");
                 break;
             case 404:
-                console.error("La auditoria no existe");
+                console.error("El diagnostico no existe");
                 break;
             default:
                 console.error("Error inesperado. Contacte al administrador.");
@@ -32,16 +32,16 @@ export const getAuditory = async (): Promise<Auditory[] | null> => {
     return null; // en caso de error
 };
 
-export const postAuditory = async (datos: Auditory): Promise<any | undefined> => {
+export const postDiagnostic = async (datos: Diagnostic): Promise<any | undefined> => {
     try {
         // Remove id if present
-        const { id, ...AuditoryData } = datos;
-        console.log("Datos enviados a postAuditory:", AuditoryData);
+        const { id, ...DiagnosticData } = datos;
+        console.log("Datos enviados a postDiagnostic:", DiagnosticData);
 
-        const response = await fetch(`${URL_API}/api/Auditory`, {
+        const response = await fetch(`${URL_API}/api/Diagnostic`, {
             method: "POST",
             headers: myHeaders,
-            body: JSON.stringify(AuditoryData)
+            body: JSON.stringify(DiagnosticData)
         });
         if (!response.ok) {
             const errorText = await response.text();
@@ -54,9 +54,9 @@ export const postAuditory = async (datos: Auditory): Promise<any | undefined> =>
     }
 }
 
-export const putAuditory = async (datos: Auditory, id: number | string): Promise<Response | undefined> => {
+export const putDiagnostic = async (datos: Diagnostic, id: number | string): Promise<Response | undefined> => {
     try {
-        return await fetch(`${URL_API}/api/Auditory/${id}`, {
+        return await fetch(`${URL_API}/api/Diagnostic/${id}`, {
             method: "PUT",
             headers: myHeaders,
             body: JSON.stringify(datos)
@@ -66,9 +66,9 @@ export const putAuditory = async (datos: Auditory, id: number | string): Promise
     }
 }
 
-export const deleteAuditory = async (id: number | string): Promise<Response | undefined> => {
+export const deleteDiagnostic = async (id: number | string): Promise<Response | undefined> => {
     try {
-        const response = await fetch(`${URL_API}/api/Auditory/${id}`, {
+        const response = await fetch(`${URL_API}/api/Diagnostic/${id}`, {
             method: "DELETE",
             headers: myHeaders,
         });
