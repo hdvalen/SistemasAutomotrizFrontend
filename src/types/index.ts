@@ -130,3 +130,11 @@ export interface OrderDetails {
   RequiredPieces: number;
   TotalPrice: number;
 }
+
+export interface Auditory {
+  id: number;
+  EntityName: string;
+  ChangeType: string;
+  ChangeBy: string;
+  Date: Date;
+}
