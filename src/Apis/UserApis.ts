@@ -1,26 +1,26 @@
-import { TypeVehicle } from "../types";
+import type { User } from "../types";
 
 const URL_API = "http://localhost:5070";
 const myHeaders = new Headers({
     "Content-Type": "application/json"
 });
 
-export const getTypeVehicle = async (): Promise<TypeVehicle[] | null> => {
+export const getUser = async (): Promise<User[] | null> => {
     try {
-        const response = await fetch(`${URL_API}/api/TypeVehicle`, {
+        const response = await fetch(`${URL_API}/api/User`, {
             method: 'GET',
             headers: myHeaders
         });
 
         switch (response.status) {
             case 200:
-                const data: TypeVehicle[] = await response.json();
+                const data: User[] = await response.json();
                 return data;
             case 401:
                 console.error("No autorizado o token inválido");
                 break;
             case 404:
-                console.error("El tipo de vehiculo no existe");
+                console.error("El User no existe");
                 break;
             default:
                 console.error("Error inesperado. Contacte al administrador.");
@@ -32,16 +32,16 @@ export const getTypeVehicle = async (): Promise<TypeVehicle[] | null> => {
     return null; // en caso de error
 };
 
-export const postTypeVehicle = async (datos: TypeVehicle): Promise<any | undefined> => {
+export const postUser = async (datos: User): Promise<any | undefined> => {
     try {
         // Remove id if present
-        const { id, ...clientTypeVehicle } = datos;
-        console.log("Datos enviados a postTypeVehicle:", clientTypeVehicle);
+        const { id, ...userData } = datos;
+        console.log("Datos enviados a postUser:", userData);
 
-        const response = await fetch(`${URL_API}/api/TypeVehicle`, {
+        const response = await fetch(`${URL_API}/api/User`, {
             method: "POST",
             headers: myHeaders,
-            body: JSON.stringify(clientTypeVehicle)
+            body: JSON.stringify(userData)
         });
         if (!response.ok) {
             const errorText = await response.text();
@@ -54,9 +54,9 @@ export const postTypeVehicle = async (datos: TypeVehicle): Promise<any | undefin
     }
 }
 
-export const putTypeVehicle = async (datos: TypeVehicle, id: number | string): Promise<Response | undefined> => {
+export const putUser = async (datos: User, id: number | string): Promise<Response | undefined> => {
     try {
-        return await fetch(`${URL_API}/api/TypeVehicle/${id}`, {
+        return await fetch(`${URL_API}/api/User/${id}`, {
             method: "PUT",
             headers: myHeaders,
             body: JSON.stringify(datos)
@@ -66,9 +66,9 @@ export const putTypeVehicle = async (datos: TypeVehicle, id: number | string): P
     }
 }
 
-export const deleteTypeVehicle = async (id: number | string): Promise<Response | undefined> => {
+export const deleteUser = async (id: number | string): Promise<Response | undefined> => {
     try {
-        const response = await fetch(`${URL_API}/api/TypeVehicle/${id}`, {
+        const response = await fetch(`${URL_API}/api/User/${id}`, {
             method: "DELETE",
             headers: myHeaders,
         });

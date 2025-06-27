@@ -1,15 +1,15 @@
 export interface User {
-  id: string;
-  nombre: string;
-  email: string;
-  telefono: string;
-  rol: UserRole;
-  activo: boolean;
-  createdAt: string;
-  updatedAt: string;
+  id: number;
+  Name: string;
+  LastName: string;
+  UserName: string;
+  Email: string;
+  Password: string;
 }
-
-export type UserRole = 'administrador' | 'recepcionista' | 'mecanico';
+export type UserRol = {
+  UserId: number;
+  RolId: number;
+}
 
 export interface AuthState {
   user: User | null;
@@ -18,71 +18,41 @@ export interface AuthState {
   isLoading: boolean;
 }
 
-export interface Cliente {
+export interface Client {
   id: string;
-  nombre: string;
-  apellido: string;
-  email: string;
-  telefono: string;
-  direccion: string;
-  fechaNacimiento?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+  name: string;
+  lastName: string;
+  Email: string;
+  Phone: string;
+  Birth?: string;
+  Identification: string;
+  TypeVehicle?: TypeVehicle;
 
-export interface Vehiculo {
-  id: string;
-  clienteId: string;
-  marca: string;
-  modelo: string;
-  año: number;
-  placa: string;
-  vin: string;
-  color: string;
-  kilometraje: number;
-  cliente?: Cliente;
-  createdAt: string;
-  updatedAt: string;
 }
+export interface Vehicle {
+  id: number;
+  ClienteId: number;
+  Brand: string;
+  Model: string;
+  Vin: string;
+  Mileage: number;
+  TypeVehicleId: number;
 
-export interface OrdenServicio {
-  id: string;
-  clienteId: string;
-  vehiculoId: string;
-  mecanicoId: string;
-  descripcion: string;
-  estado: EstadoOrden;
-  fechaIngreso: string;
-  fechaEstimada?: string;
-  fechaEntrega?: string;
-  costoManoObra: number;
-  costoRepuestos: number;
-  costoTotal: number;
-  observaciones?: string;
-  cliente?: Cliente;
-  vehiculo?: Vehiculo;
-  mecanico?: User;
-  repuestos?: RepuestoOrden[];
-  createdAt: string;
-  updatedAt: string;
+}
+export interface ServiceOrder {
+  id: number;
+  VehiclesId: number;
+  TypeServiceId: number;
+  StateId: number;
+  EntryDate: Date;
+  ExitDate: Date;
+  IsAuthorized: boolean;
+  ClientMessage: string;
+  UserId: number;
+  User?: User;
 }
 
 export type EstadoOrden = 'pendiente' | 'en_proceso' | 'completada' | 'cancelada';
-
-export interface Repuesto {
-  id: string;
-  codigo: string;
-  nombre: string;
-  descripcion: string;
-  categoria: string;
-  proveedor: string;
-  stock: number;
-  stockMinimo: number;
-  precioCompra: number;
-  precioVenta: number;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export interface RepuestoOrden {
   id: string;
@@ -91,25 +61,7 @@ export interface RepuestoOrden {
   cantidad: number;
   precioUnitario: number;
   subtotal: number;
-  repuesto?: Repuesto;
-}
-
-export interface Factura {
-  id: string;
-  ordenId: string;
-  clienteId: string;
-  numero: string;
-  fecha: string;
-  subtotal: number;
-  impuestos: number;
-  total: number;
-  estado: EstadoFactura;
-  metodoPago: string;
-  observaciones?: string;
-  orden?: OrdenServicio;
-  cliente?: Cliente;
-  createdAt: string;
-  updatedAt: string;
+  SparePart?: SparePart;
 }
 
 export type EstadoFactura = 'pendiente' | 'pagada' | 'anulada';
@@ -123,4 +75,36 @@ export interface DashboardStats {
   clientesActivos: number;
   vehiculosEnTaller: number;
   repuestosBajoStock: number;
+}
+
+export interface Invoice {
+  id: number;
+  ServiceOrderId: number;
+  TotalPrice: number;
+  Date: Date;
+  Code: string;
+}
+
+export interface TypeVehicle {
+  id: number;
+  name: string;
+}
+
+export interface SparePart {
+  id: number;
+  Code: string;
+  Description: string;
+  Stock: number;
+  MaxStock: number;
+  MiniStock: number;
+  UnitPrice: number;
+  Category: string;
+}
+
+export interface OrderDetails {
+  id: number;
+  ServiceOrderId: number;
+  SparePartId: number;
+  RequiredPieces: number;
+  TotalPrice: number;
 }

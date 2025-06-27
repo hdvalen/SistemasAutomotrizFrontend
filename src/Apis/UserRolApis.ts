@@ -1,26 +1,26 @@
-import type { Vehicle } from "../types";
+import type { UserRol } from "../types";
 
 const URL_API = "http://localhost:5070";
 const myHeaders = new Headers({
     "Content-Type": "application/json"
 });
 
-export const getVehicle = async (): Promise<Vehicle[] | null> => {
+export const getUserRol = async (): Promise<UserRol[] | null> => {
     try {
-        const response = await fetch(`${URL_API}/api/Vehicle`, {
+        const response = await fetch(`${URL_API}/api/UserRol`, {
             method: 'GET',
             headers: myHeaders
         });
 
         switch (response.status) {
             case 200:
-                const data: Vehicle[] = await response.json();
+                const data: UserRol[] = await response.json();
                 return data;
             case 401:
                 console.error("No autorizado o token inválido");
                 break;
             case 404:
-                console.error("El vehiculo no existe");
+                console.error("El UserRol no existe");
                 break;
             default:
                 console.error("Error inesperado. Contacte al administrador.");
@@ -32,16 +32,14 @@ export const getVehicle = async (): Promise<Vehicle[] | null> => {
     return null; // en caso de error
 };
 
-export const postVehicle = async (datos: Vehicle): Promise<any | undefined> => {
+export const postUserRol = async (datos: UserRol): Promise<any | undefined> => {
     try {
-        // Remove id if present
-        const { id, ...vehicleData } = datos;
-        console.log("Datos enviados a postVehicle:", vehicleData);
+        console.log("Datos enviados a postUserRol:", datos);
 
-        const response = await fetch(`${URL_API}/api/Vehicle`, {
+        const response = await fetch(`${URL_API}/api/UserRol`, {
             method: "POST",
             headers: myHeaders,
-            body: JSON.stringify(vehicleData)
+            body: JSON.stringify(datos)
         });
         if (!response.ok) {
             const errorText = await response.text();
@@ -54,9 +52,9 @@ export const postVehicle = async (datos: Vehicle): Promise<any | undefined> => {
     }
 }
 
-export const putVehicle = async (datos: Vehicle, id: number | string): Promise<Response | undefined> => {
+export const putUserRol = async (datos: UserRol, id: number | string): Promise<Response | undefined> => {
     try {
-        return await fetch(`${URL_API}/api/Vehicle/${id}`, {
+        return await fetch(`${URL_API}/api/UserRol/${id}`, {
             method: "PUT",
             headers: myHeaders,
             body: JSON.stringify(datos)
@@ -66,9 +64,9 @@ export const putVehicle = async (datos: Vehicle, id: number | string): Promise<R
     }
 }
 
-export const deleteVehicle = async (id: number | string): Promise<Response | undefined> => {
+export const deleteUserRol = async (id: number | string): Promise<Response | undefined> => {
     try {
-        const response = await fetch(`${URL_API}/api/Vehicle/${id}`, {
+        const response = await fetch(`${URL_API}/api/UserRol/${id}`, {
             method: "DELETE",
             headers: myHeaders,
         });

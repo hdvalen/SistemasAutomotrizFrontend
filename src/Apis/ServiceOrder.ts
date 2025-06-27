@@ -1,26 +1,26 @@
-import type { Vehicle } from "../types";
+import type { ServiceOrder } from "../types";
 
 const URL_API = "http://localhost:5070";
 const myHeaders = new Headers({
     "Content-Type": "application/json"
 });
 
-export const getVehicle = async (): Promise<Vehicle[] | null> => {
+export const getServiceOrder = async (): Promise<ServiceOrder[] | null> => {
     try {
-        const response = await fetch(`${URL_API}/api/Vehicle`, {
+        const response = await fetch(`${URL_API}/api/ServiceOrder`, {
             method: 'GET',
             headers: myHeaders
         });
 
         switch (response.status) {
             case 200:
-                const data: Vehicle[] = await response.json();
+                const data: ServiceOrder[] = await response.json();
                 return data;
             case 401:
                 console.error("No autorizado o token inválido");
                 break;
             case 404:
-                console.error("El vehiculo no existe");
+                console.error("El ServiceOrder no existe");
                 break;
             default:
                 console.error("Error inesperado. Contacte al administrador.");
@@ -32,16 +32,16 @@ export const getVehicle = async (): Promise<Vehicle[] | null> => {
     return null; // en caso de error
 };
 
-export const postVehicle = async (datos: Vehicle): Promise<any | undefined> => {
+export const postServiceOrder = async (datos: ServiceOrder): Promise<any | undefined> => {
     try {
         // Remove id if present
-        const { id, ...vehicleData } = datos;
-        console.log("Datos enviados a postVehicle:", vehicleData);
+        const { id, ...serviceOrderData } = datos;
+        console.log("Datos enviados a postServiceOrder:", serviceOrderData);
 
-        const response = await fetch(`${URL_API}/api/Vehicle`, {
+        const response = await fetch(`${URL_API}/api/ServiceOrder`, {
             method: "POST",
             headers: myHeaders,
-            body: JSON.stringify(vehicleData)
+            body: JSON.stringify(serviceOrderData)
         });
         if (!response.ok) {
             const errorText = await response.text();
@@ -54,9 +54,9 @@ export const postVehicle = async (datos: Vehicle): Promise<any | undefined> => {
     }
 }
 
-export const putVehicle = async (datos: Vehicle, id: number | string): Promise<Response | undefined> => {
+export const putServiceOrder = async (datos: ServiceOrder, id: number | string): Promise<Response | undefined> => {
     try {
-        return await fetch(`${URL_API}/api/Vehicle/${id}`, {
+        return await fetch(`${URL_API}/api/ServiceOrder/${id}`, {
             method: "PUT",
             headers: myHeaders,
             body: JSON.stringify(datos)
@@ -66,9 +66,9 @@ export const putVehicle = async (datos: Vehicle, id: number | string): Promise<R
     }
 }
 
-export const deleteVehicle = async (id: number | string): Promise<Response | undefined> => {
+export const deleteServiceOrder = async (id: number | string): Promise<Response | undefined> => {
     try {
-        const response = await fetch(`${URL_API}/api/Vehicle/${id}`, {
+        const response = await fetch(`${URL_API}/api/ServiceOrder/${id}`, {
             method: "DELETE",
             headers: myHeaders,
         });

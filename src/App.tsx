@@ -5,7 +5,7 @@ import { LoginForm } from './components/auth/LoginForm';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Layout } from './components/layout/Layout';
 import { Dashboard } from './pages/Dashboard';
-import { HomePage } from './pages/HomePages';
+import { HomePage } from './pages/homepages';
 /* import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { OrdenesServicio } from './pages/OrdenesServicio';
