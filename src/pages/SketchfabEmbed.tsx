@@ -4,12 +4,12 @@ export default function SketchfabEmbed() {
   return (
     <div
       style={{
-        position: "fixed",
-        top: "100px",
-        right: "250px",
-        zIndex: 1000, 
+        position: "absolute",
+        bottom: "360px",
+        left: "950px",
         padding: "10px",
         marginBottom: "20px",
+        zIndex: 10,
       }}
     >
       <div className="sketchfab-embed-wrapper">

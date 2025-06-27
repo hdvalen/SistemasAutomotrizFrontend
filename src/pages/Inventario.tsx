@@ -7,7 +7,7 @@ import { Select } from '../components/ui/Select';
 import { Plus, Search, Edit, Trash2, AlertTriangle, Package, TrendingDown, TrendingUp } from 'lucide-react';
 import { getSpareParts, postSparePart, putSparePart, deleteSparePart } from '../Apis/SparePartApis';
 import type { SparePart } from '../types';
-import SketchfabEmbed from './SplineScene';
+import SketchfabEmbed from './SketchfabEmbed';
 
 export function Inventario() {
   const [searchTerm, setSearchTerm] = useState('');
