@@ -259,123 +259,126 @@ export function OrdenesServicio() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+
+      <div className="flex items-center justify-between bg-zinc-800 rounded-xl p-6 shadow-lg border border-zinc-700">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
             Órdenes de Servicio
           </h1>
-          <p className="text-neutral-600 mt-1">Gestiona las órdenes de trabajo del taller</p>
+          <p className="text-zinc-400 mt-2 text-lg">Gestiona las órdenes de trabajo del taller</p>
         </div>
-        <Button onClick={handleCreate} className="shadow-medium">
-          <Plus className="h-4 w-4 mr-2" />
+        <Button onClick={handleCreate} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105">
+          <Plus className="h-5 w-5 mr-2" />
           Nueva Orden
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
+      {/*stasts: cards*/}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="bg-zinc-800 border border-zinc-700 shadow-lg hover:shadow-xl transition-shadow duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-neutral-600">Total Órdenes</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">{ordenes.length}</p>
+                <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Total Órdenes</p>
+                <p className="text-3xl font-bold text-white mt-2">{ordenes.length}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-neutral-500 to-neutral-600 shadow-medium">
-                <Clock className="h-7 w-7 text-white" />
+              <div className="p-4 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
+                <Clock className="h-8 w-8 text-white" />
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-zinc-800 border border-zinc-700 shadow-lg hover:shadow-xl transition-shadow duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-neutral-600">En Proceso</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">{getOrdenesEnProceso()}</p>
+                <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">En Proceso</p>
+                <p className="text-3xl font-bold text-white mt-1">{getOrdenesEnProceso()}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-primary-500 to-primary-600 shadow-medium">
-                <AlertTriangle className="h-7 w-7 text-white" />
+              <div className="p-4 rounded-full bg-gradient-to-br from-red-300 to-red-700 shadow-lg">
+                <AlertTriangle className="h-8 w-8 text-white" />
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-zinc-800 border border-zinc-700 shadow-lg hover:shadow-xl transition-shadow duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-neutral-600">Completadas</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">{getOrdenesCompletadas()}</p>
+                <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Completadas</p>
+                <p className="text-3xl font-bold text-white mt-1">{getOrdenesCompletadas()}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-success-500 to-success-600 shadow-medium">
-                <CheckCircle className="h-7 w-7 text-white" />
+              <div className="p-4 rounded-full bg-gradient-to-br from-green-400 to-green-700 shadow-lg">
+                <CheckCircle className="h-8 w-8 text-white" />
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-zinc-800 border border-zinc-700 shadow-lg hover:shadow-xl transition-shadow duration-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-neutral-600">Pendientes</p>
-                <p className="text-3xl font-bold text-neutral-900 mt-1">{getOrdenesPendientes()}</p>
+                <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Pendientes</p>
+                <p className="text-3xl font-bold text-white mt-1">{getOrdenesPendientes()}</p>
               </div>
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-warning-500 to-warning-600 shadow-medium">
-                <Clock className="h-7 w-7 text-white" />
+              <div className="p-4 rounded-full bg-gradient-to-br from-orange-500 to-purple-600 shadow-lg">
+                <Clock className="h-8 w-8 text-white" />
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center">
-              <div className="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+      <Card className='bg-zinc-900 border border-zinc-700 shadow-xl'>
+        <CardHeader className="bg-gradient-to-r  to-indigo-900 border-b border-zinc-700">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <CardTitle className="flex items-center text-xl font-bold text-white">
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
               Lista de Órdenes
             </CardTitle>
-            <div className="flex space-x-4">
-              <Select value={filterEstado} onChange={e => setFilterEstado(e.target.value.toLowerCase())}>
-                <option value="">Todos los estados</option>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <Select value={filterEstado} onChange={e => setFilterEstado(e.target.value.toLowerCase())} 
+                className='bg-zinc-800 border-zinc-600 text-white rounded-lg focus:border-blue-500 focus:ring-blue-500'>
+                <option value="" >Todos los estados</option>
                 {estados.map((estado) => (
                   <option key={estado.id} value={estado.name.toLowerCase()}>
                     {estado.name}
                   </option>
                 ))}
               </Select>
-              <div className="relative max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-400" />
+              <div className="relative ">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-400" />
                 <Input
                   placeholder="Buscar órdenes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 pr-4 py-2 bg-zinc-800 text-white border-zinc-600 focus:border-blue-500 focus:ring-blue-500 rounded-lg w-full sm:w-64"
                 />
               </div>
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-neutral-200">
-              <thead className="bg-gradient-to-r from-neutral-50 to-neutral-100">
+        <CardContent className='p-0'>
+          <div>
+            <table className="min-w-full divide-y divide-zinc-500">
+              <thead className="bg-zinc-800">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Orden
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Cliente / Vehículo
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Mecánico
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Estado
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Fecha de Salida
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-right text-xs font-bold text-neutral-400 uppercase tracking-wider">
                     Acciones
                   </th>
                 </tr>
@@ -452,8 +455,8 @@ export function OrdenesServicio() {
                     ...prev,
                     vehiclesId: value ? Number(value) : undefined
                   }));
-                }} className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
-                  <option value="">Seleccionar vehículo</option>
+                }} className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray rounded-lg">
+                  <option value="" >Seleccionar vehículo</option>
                   {vehiculos.map(vehiculo => (
                     <option key={vehiculo.id} value={vehiculo.id}>
                       {vehiculo.brand} {vehiculo.model}
@@ -518,7 +521,7 @@ export function OrdenesServicio() {
                 <Input label="Mensaje Cliente" name="clientMessage" value={formValues.clientMessage || ''} onChange={handleInputChange}/>
               </div>
             </div>
-            <div className="flex justify-end space-x-3 mt-8">
+            <div className="flex justify-end space-x-3 mt-8 from-blue-600 to-purple-500 hover:from-purple-200 hover:to-blue-700">
               <Button variant="outline" onClick={() => setShowModal(false)}>
                 Cancelar
               </Button>
