@@ -21,6 +21,7 @@ const navigation = {
     { name: 'Clientes', href: '/clientes', icon: Users },
     { name: 'Vehículos', href: '/vehiculos', icon: Car },
     { name: 'Órdenes de Servicio', href: '/ordenes', icon: ClipboardList },
+    { name: 'Detalles Orden', href: '/ordenDetalles', icon: ClipboardList },
     { name: 'Inventario', href: '/inventario', icon: Package },
     { name: 'Facturación', href: '/facturacion', icon: FileText },
     { name: 'Usuarios', href: '/usuarios', icon: Users },
@@ -31,13 +32,13 @@ const navigation = {
     { name: 'Clientes', href: '/clientes', icon: Users },
     { name: 'Vehículos', href: '/vehiculos', icon: Car },
     { name: 'Órdenes de Servicio', href: '/ordenes', icon: ClipboardList },
-    { name: 'Facturación', href: '/facturacion', icon: FileText },
     { name: 'Diagnostico', href: '/diagnostico', icon: Calendar},
   ],
   mecanico: [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
-    { name: 'Mis Órdenes', href: '/mis-ordenes', icon: Wrench },
-    { name: 'Inventario', href: '/inventario', icon: Package },
+    { name: 'Órdenes de Servicio', href: '/ordenes', icon: ClipboardList },
+    { name: 'Facturación', href: '/facturacion', icon: FileText },
+    { name: 'Detalles Orden', href: '/ordenDetalles', icon: ClipboardList },
   ],
 };
 

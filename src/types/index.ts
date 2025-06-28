@@ -128,12 +128,15 @@ export interface SparePart {
   unitPrice: number;
   category: string;
 }
+
 export interface OrderDetails {
   id: number;
-  ServiceOrderId: number;
-  SparePartId: number;
-  RequiredPieces: number;
-  TotalPrice: number;
+  serviceOrderId: number;
+  sparePartId: number;
+  requiredPieces: number;
+  totalPrice: number;
+  serviceOrders?: ServiceOrder;
+  spareParts?: SparePart;
 }
 
 export interface Auditory {

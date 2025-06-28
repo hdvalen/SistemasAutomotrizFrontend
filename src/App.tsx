@@ -14,6 +14,7 @@ import { OrdenesServicio } from './pages/OrdenesServicio';
 import { Facturacion } from './pages/Facturacion';
 import { Historial } from './pages/Historial';
 import { Diagnostico } from './pages/Diagnostico';
+import { DetallesOrden } from './pages/DetallesOrden';
 /* import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { OrdenesServicio } from './pages/OrdenesServicio';
@@ -70,7 +71,7 @@ function AppRoutes() {
             <Route
                 path="/inventario"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute allowedRoles={['administrador']}>
                     <Layout>
                       <Inventario />
                     </Layout>
@@ -80,7 +81,7 @@ function AppRoutes() {
               <Route
                 path="/facturacion"
                 element={
-                  <ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
+                  <ProtectedRoute allowedRoles={['administrador', 'mecanico']}>
                     <Layout>
                       <Facturacion />
                     </Layout>
@@ -100,7 +101,7 @@ function AppRoutes() {
             <Route
           path="/ordenes"
           element={
-            <ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
+            <ProtectedRoute allowedRoles={['administrador', 'recepcionista', 'mecanico']}>
               <Layout>
                 <OrdenesServicio />
               </Layout>
@@ -108,9 +109,19 @@ function AppRoutes() {
           }
         />
         <Route
+          path="/ordenDetalles"
+          element={
+            <ProtectedRoute allowedRoles={['administrador', 'mecanico']}>
+              <Layout>
+                <DetallesOrden />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/diagnostico"
           element={
-            <ProtectedRoute allowedRoles={['recepcionista']}>
+            <ProtectedRoute allowedRoles={['administrador','recepcionista']}>
               <Layout>
                 <Diagnostico />
               </Layout>
