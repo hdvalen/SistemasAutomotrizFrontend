@@ -8,7 +8,7 @@ export interface User {
   password: string;
   createdAt: string;
   updatedAt: string;
-  role?: string;
+  rol: string;
 }
 export type UserRol = {
   userId: number;
@@ -22,6 +22,7 @@ export interface Rol {
   updatedAt: string;
 }
 
+export type UserRole = 'administrador' | 'recepcionista' | 'mecanico';
 export interface AuthState {
   user: User | null;
   token: string | null;
@@ -146,10 +147,10 @@ export interface Auditory {
 
 export interface Diagnostic {
   id: number;
-  UserId: number;
-  User: User;
-  Description: string;
-  Date: Date;
+  userId: number;
+  user?: User;
+  description: string;
+  date: string;
 }
 
 export interface DetailInspection {

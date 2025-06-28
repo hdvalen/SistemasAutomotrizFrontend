@@ -12,7 +12,8 @@ import { Usuarios } from './pages/Usuarios';
 import { Inventario } from './pages/Inventario';
 import { OrdenesServicio } from './pages/OrdenesServicio';
 import { Facturacion } from './pages/Facturacion';
-import { Configuracion } from './pages/Configuracion';
+import { Historial } from './pages/Historial';
+import { Diagnostico } from './pages/Diagnostico';
 /* import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { OrdenesServicio } from './pages/OrdenesServicio';
@@ -107,11 +108,21 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/configuracion"
+          path="/diagnostico"
+          element={
+            <ProtectedRoute allowedRoles={['recepcionista']}>
+              <Layout>
+                <Diagnostico />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/historial"
           element={
             <ProtectedRoute allowedRoles={['administrador']}>
               <Layout>
-                <Configuracion />
+                <Historial />
               </Layout>
             </ProtectedRoute>
           }

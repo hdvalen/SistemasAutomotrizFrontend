@@ -8,7 +8,7 @@ import { Search} from 'lucide-react';
 import { getAuditory } from '../Apis/AuditoryApis';
 import type { Auditory } from '../types';
 
-export function Configuracion() {
+export function Historial() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedAuditory, setSelectedAuditory] = useState<Auditory | null>(null);
