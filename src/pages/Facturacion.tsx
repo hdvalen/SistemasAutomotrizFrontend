@@ -372,60 +372,64 @@ export function Facturacion() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div>
+      <div >
+        {/* Header */}
+        <div className='space-y-4 mb-8 shadow-xl bg'>
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
             Sistema de Facturación
           </h1>
-          <p className="text-neutral-600 mt-1">Órdenes de servicio pendientes de facturar</p>
+          <p className="text-zinc-400 mt-2 text-lg">Órdenes de servicio pendientes de facturar</p>
+          </div>
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center">
-              <div className="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+      <Card className='bg-zinc-800 border border-zinc-700 shadow-xl  '>
+        <CardHeader className="bg-gradient-to-r  to-indigo-900 border-b border-zinc-700">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <CardTitle className="flex items-center text-xl font-bold text-white">
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
               Órdenes Pendientes de Facturar
             </CardTitle>
-            <div className="flex space-x-4">
-              <Select value={filterEstado} onChange={(e) => setFilterEstado(e.target.value)}>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <Select value={filterEstado} onChange={(e) => setFilterEstado(e.target.value)}
+                className="bg-zinc-800 border-zinc-600 text-white rounded-lg focus:border-blue-500 focus:ring-blue-500">
                 <option value="">Todos los estados</option>
                 {estados.map((estado) => (
                   <option key={estado.id} value={estado.name.toLowerCase()}>{estado.name}</option>
                 ))}
               </Select>
-              <div className="relative max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-400" />
+              <div className="relative ">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-400" />
                 <Input
                   placeholder="Buscar órdenes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 pr-4 py-2 bg-zinc-800 text-white border-zinc-600 focus:border-blue-500 focus:ring-blue-500 rounded-lg w-full sm:w-64"
                 />
               </div>
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-neutral-200">
-              <thead className="bg-gradient-to-r from-neutral-50 to-neutral-100">
+        <CardContent className="p-0">
+          <div>
+            <table className="min-w-full divide-y divide-zinc-500">
+              <thead className="bg-zinc-800"> 
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Orden de Servicio
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Cliente / Vehículo
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Estado
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Fecha Entrada
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-right text-xs font-bold text-zinc-400 uppercase tracking-wider">
                     Acciones
                   </th>
                 </tr>
