@@ -8,6 +8,7 @@ export interface User {
   password: string;
   createdAt: string;
   updatedAt: string;
+  role?: string;
 }
 export type UserRol = {
   userId: number;
@@ -55,12 +56,14 @@ export interface Vehicle {
   createdAt: string;
   updatedAt: string;
 }
+
 export interface TypeVehicle {
   id: number;
   name: string;
   createdAt: string;
   updatedAt: string;
 }
+
 export interface ServiceOrder {
   id: number;
   vehiclesId: number;
@@ -90,21 +93,6 @@ export interface TypeService {
   duration: number;
   price: number;
 }
-
-export type EstadoOrden = 'pendiente' | 'en_proceso' | 'completada' | 'cancelada';
-
-export interface RepuestoOrden {
-  id: string;
-  ordenId: string;
-  repuestoId: string;
-  cantidad: number;
-  precioUnitario: number;
-  subtotal: number;
-  SparePart?: SparePart;
-}
-
-export type EstadoFactura = 'pendiente' | 'pagada' | 'anulada';
-
 export interface DashboardStats {
   totalOrdenes: number;
   ordenesPendientes: number;
@@ -118,10 +106,11 @@ export interface DashboardStats {
 
 export interface Invoice {
   id: number;
-  ServiceOrderId: number;
-  TotalPrice: number;
-  Date: Date;
-  Code: string;
+  serviceOrder_Id: number;
+  totalPrice: number;
+  date: string;
+  code: string;
+  serviceOrder?: ServiceOrder;
 }
 
 export interface TypeVehicle {
@@ -148,10 +137,11 @@ export interface OrderDetails {
 
 export interface Auditory {
   id: number;
-  EntityName: string;
-  ChangeType: string;
-  ChangeBy: string;
-  Date: Date;
+  entityName: string;
+  changeType: string;
+  changeBy: string;
+  user: string;
+  date: string;
 }
 
 export interface Diagnostic {
