@@ -9,6 +9,7 @@ import type { Vehicle, Client, TypeVehicle} from '../types';
 import { getVehicle, putVehicle, deleteVehicle, postVehicle } from '../Apis/vehiclesApis';
 import { getClient } from '../Apis/ClientApis';
 import { getTypeVehicle } from '../Apis/TypeVehicleApis';
+import SketchfabEmbed from './SketchfabEmbed';
 
 export function Vehiculos() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -175,7 +176,8 @@ export function Vehiculos() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-900 py-8 px-4 sm:px-6 lg:px-8 text-zinc-100">
+    
+    <div className="min-h-screen bg-zinc-900 py-8 px-4 sm:px-6 lg:px-8 text-zinc-100 overflow-hidden">
   <div className="max-w-7xl mx-auto space-y-8">
     {/* Header */}
     <div className="flex items-center justify-between bg-zinc-800 rounded-xl p-6 shadow-lg border border-zinc-700">
@@ -226,34 +228,11 @@ export function Vehiculos() {
       </div>
     </CardContent>
   </Card>
-
-  <Card className="bg-zinc-800 border border-zinc-700 shadow-lg hover:shadow-xl transition-shadow duration-200">
-    <CardContent className="p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Marcas</p>
-          <p className="text-3xl font-bold text-white mt-2">{brands.length}</p>
-        </div>
-        <div className="p-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
-          <Wrench className="h-8 w-8 text-white" />
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-
-  <Card className="bg-zinc-800 border border-zinc-700 shadow-lg hover:shadow-xl transition-shadow duration-200">
-    <CardContent className="p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Activos</p>
-          <p className="text-3xl font-bold text-white mt-2">{vehiculos.length}</p>
-        </div>
-        <div className="p-4 rounded-full bg-gradient-to-br from-green-500 to-teal-600 shadow-lg">
-          <Calendar className="h-8 w-8 text-white" />
-        </div>
-      </div>
-    </CardContent>
-  </Card>
+  <Card className="!bg-zinc-900 !border-none !shadow-none">
+  <CardContent className="p-0">
+    <SketchfabEmbed />
+  </CardContent>
+</Card>
 </div>
 
 
@@ -289,8 +268,8 @@ export function Vehiculos() {
     </div>
   </CardHeader>
   <CardContent className="p-0">
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-zinc-700">
+    <div className="">
+      <table className="min-w-full divide-y divide-zinc-500">
         <thead className="bg-zinc-800">
           <tr>
             {['Vehículo', 'Propietario', 'Detalles', 'Kilometraje', 'Acciones'].map((title) => (
