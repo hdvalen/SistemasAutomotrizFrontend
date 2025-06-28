@@ -26,6 +26,8 @@ const navigation = {
     { name: 'Facturación', href: '/facturacion', icon: FileText },
     { name: 'Usuarios', href: '/usuarios', icon: Users },
     { name: 'Historial', href: '/historial', icon: Settings },
+    { name: 'Estados', href: '/estados', icon: Users },
+    { name: 'Servicios', href: '/tipodeservicio', icon: Settings },
   ],
   recepcionista: [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
