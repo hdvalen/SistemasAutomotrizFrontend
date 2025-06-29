@@ -7,7 +7,7 @@ const myHeaders = new Headers({
 
 export const getSpareParts = async (): Promise<SparePart[] | null> => {
     try {
-        const response = await fetch(`${URL_API}/api/SpareParts`, {
+        const response = await fetch(`${URL_API}/api/SparePart`, {
             method: 'GET',
             headers: myHeaders
         });
@@ -38,7 +38,7 @@ export const postSparePart = async (datos: SparePart): Promise<any | undefined> 
         const { id, ...sparePartData } = datos;
         console.log("Datos enviados a postSparePart:", sparePartData);
 
-        const response = await fetch(`${URL_API}/api/SpareParts`, {
+        const response = await fetch(`${URL_API}/api/SparePart`, {
             method: "POST",
             headers: myHeaders,
             body: JSON.stringify(sparePartData)
@@ -56,7 +56,7 @@ export const postSparePart = async (datos: SparePart): Promise<any | undefined> 
 
 export const putSparePart = async (datos: SparePart, id: number | string): Promise<Response | undefined> => {
     try {
-        return await fetch(`${URL_API}/api/SpareParts/${id}`, {
+        return await fetch(`${URL_API}/api/SparePart/${id}`, {
             method: "PUT",
             headers: myHeaders,
             body: JSON.stringify(datos)
@@ -68,7 +68,7 @@ export const putSparePart = async (datos: SparePart, id: number | string): Promi
 
 export const deleteSparePart = async (id: number | string): Promise<Response | undefined> => {
     try {
-        const response = await fetch(`${URL_API}/api/SpareParts/${id}`, {
+        const response = await fetch(`${URL_API}/api/SparePart/${id}`, {
             method: "DELETE",
             headers: myHeaders,
         });

@@ -69,6 +69,13 @@ export function Clientes() {
       }
     } else {
       await postClient(formValues as Client);
+      Swal.fire({
+        icon: 'success',
+        title: 'Creado',
+        text: 'El cliente ha sido creado exitosamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
     setShowModal(false);
     const data = await getClient();
@@ -113,95 +120,99 @@ export function Clientes() {
   };
 
   return (
-     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+     <div className="min-h-screen bg-zinc-900 py-8 px-4 sm:px-6 lg:px-8">
+       <div className="max-w-7xl mx-auto space-y-8">
         {/* Encabezado */}
-        <div className="flex items-center justify-between bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+         <div className="flex items-center justify-between bg-zinc-800 rounded-xl p-6 shadow-lg border border-zinc-700">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
               Gestión de Clientes
             </h1>
-            <p className="text-gray-600 mt-2 text-lg">Administra la información de tus clientes</p>
+            <p className="text-zinc-400 mt-2 text-lg">Administra la información de tus clientes</p>
           </div>
-          <Button onClick={handleCreate} className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105">
-            <Plus className="h-5 w-5 mr-2" />
-            Nuevo Cliente
-          </Button>
+          <Button
+        onClick={handleCreate}
+        className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105"
+      >
+        <Plus className="h-5 w-5 mr-2" />
+        Nuevo Cliente
+      </Button>
         </div>
 
         {/* Tabla de Clientes */}
-        <Card className="bg-white border border-gray-200 shadow-xl">
-          <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-gray-200">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <CardTitle className="flex items-center text-xl font-bold text-gray-900">
-                <div className="w-3 h-3 bg-blue-500 rounded-full mr-3" />
-                Lista de Clientes
-              </CardTitle>
-              <div className="relative w-full sm:w-auto">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-purple-400" />
-                <Input
-                  placeholder="Buscar clientes..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border-purple-300 focus:border-purple-500 focus:ring-purple-500 rounded-lg w-full sm:w-64"
-                />
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gradient-to-r from-indigo-100 to-purple-100">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Cliente</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Contacto</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Nacimiento</th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Identificación</th>
-                    <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-100">
-                  {filteredClientes.map((cliente) => (
-                    <tr key={cliente.id} className="hover:bg-indigo-50 transition">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white flex items-center justify-center shadow">
-                            <span className="text-sm font-bold">
-                              {cliente.name.charAt(0)}{cliente.lastName.charAt(0)}
-                            </span>
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-bold text-gray-900">{cliente.name} {cliente.lastName}</div>
-                            <div className="text-sm text-gray-500">ID: {cliente.id}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-semibold text-gray-900">{cliente.email}</div>
-                        <div className="text-sm text-gray-500">{cliente.phone}</div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">{cliente.birth}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{cliente.identification}</td>
-                      <td className="px-6 py-4 text-right whitespace-nowrap">
-                        <div className="flex justify-end space-x-2">
-                          <Button variant="ghost" size="sm" className="hover:bg-purple-100 text-purple-600">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleEdit(cliente)} className="hover:bg-indigo-100 text-indigo-600">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleDelete(cliente.id)} className="hover:bg-red-100 text-red-600">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
+        <Card className="bg-zinc-900 border border-zinc-700 shadow-xl">
+  <CardHeader className="bg-gradient-to-r to-zinc-700 border-b border-zinc-600">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <CardTitle className="flex items-center text-xl font-bold text-zinc-100">
+        <div className="w-3 h-3 bg-blue-500 rounded-full mr-3" />
+        Lista de Clientes
+      </CardTitle>
+      <div className="relative w-full sm:w-auto">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-purple-300" />
+        <Input
+          placeholder="Buscar clientes..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="pl-10 pr-4 py-2 border-zinc-600 focus:border-purple-500 focus:ring-purple-500 rounded-lg w-full sm:w-64 bg-zinc-800 text-zinc-100 placeholder-zinc-400"
+        />
+      </div>
+    </div>
+  </CardHeader>
+  <CardContent className="p-0">
+    <div>
+      <table className="min-w-full divide-y divide-zinc-700">
+        <thead className="bg-gradient-to-r from-zinc-800 to-zinc-700">
+          <tr>
+            <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">Cliente</th>
+            <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">Contacto</th>
+            <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">Nacimiento</th>
+            <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">Identificación</th>
+            <th className="px-6 py-4 text-right text-xs font-bold text-zinc-400 uppercase tracking-wider">Acciones</th>
+          </tr>
+        </thead>
+        <tbody className="bg-zinc-900 divide-y divide-zinc-700">
+          {filteredClientes.map((cliente) => (
+            <tr key={cliente.id} className="hover:bg-zinc-800 transition">
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="flex items-center">
+                  <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center justify-center shadow">
+                    <span className="text-sm font-bold">
+                      {cliente.name.charAt(0)}{cliente.lastName.charAt(0)}
+                    </span>
+                  </div>
+                  <div className="ml-4">
+                    <div className="text-sm font-bold text-zinc-100">{cliente.name} {cliente.lastName}</div>
+                    <div className="text-sm text-zinc-400">ID: {cliente.id}</div>
+                  </div>
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-semibold text-zinc-100">{cliente.email}</div>
+                <div className="text-sm text-zinc-400">{cliente.phone}</div>
+              </td>
+              <td className="px-6 py-4 text-sm text-zinc-300 whitespace-nowrap">{cliente.birth}</td>
+              <td className="px-6 py-4 text-sm text-zinc-400 whitespace-nowrap">{cliente.identification}</td>
+              <td className="px-6 py-4 text-right whitespace-nowrap">
+                <div className="flex justify-end space-x-2">
+                  <Button variant="ghost" size="sm" className="hover:bg-purple-800 text-purple-300">
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => handleEdit(cliente)} className="hover:bg-indigo-800 text-indigo-300">
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => handleDelete(cliente.id)} className="hover:bg-red-800 text-red-300">
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </CardContent>
+</Card>
+
 
         {/* Modal */}
         {showModal && (

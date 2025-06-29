@@ -9,14 +9,14 @@ import { HomePage } from './pages/homepages';
 import { Clientes } from './pages/Clientes';
 import { Vehiculos } from './pages/Vehiculos';
 import { Usuarios } from './pages/Usuarios';
-/* import { Clientes } from './pages/Clientes';
-import { Vehiculos } from './pages/Vehiculos';
-import { OrdenesServicio } from './pages/OrdenesServicio';
-import { MisOrdenes } from './pages/MisOrdenes';
 import { Inventario } from './pages/Inventario';
+import { OrdenesServicio } from './pages/OrdenesServicio';
 import { Facturacion } from './pages/Facturacion';
-import { Usuarios } from './pages/Usuarios';
-import { Configuracion } from './pages/Configuracion'; */
+import { Historial } from './pages/Historial';
+import { Diagnostico } from './pages/Diagnostico';
+import { DetallesOrden } from './pages/DetallesOrden';
+import { Estados } from './pages/Estados';
+import { TipodeServicio } from './pages/TipodeServicio';
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
@@ -63,6 +63,26 @@ function AppRoutes() {
               </Layout>
             </ProtectedRoute>} />
             <Route
+                path="/inventario"
+                element={
+                  <ProtectedRoute allowedRoles={['administrador']}>
+                    <Layout>
+                      <Inventario />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/facturacion"
+                element={
+                  <ProtectedRoute allowedRoles={['administrador', 'mecanico']}>
+                    <Layout>
+                      <Facturacion />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+            <Route
             path="/usuarios"
             element={
               <ProtectedRoute allowedRoles={['administrador']}>
@@ -72,90 +92,69 @@ function AppRoutes() {
               </ProtectedRoute>
             }
           />
+            <Route
+          path="/ordenes"
+          element={
+            <ProtectedRoute allowedRoles={['administrador', 'recepcionista', 'mecanico']}>
+              <Layout>
+                <OrdenesServicio />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ordenDetalles"
+          element={
+            <ProtectedRoute allowedRoles={['administrador', 'mecanico']}>
+              <Layout>
+                <DetallesOrden />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/diagnostico"
+          element={
+            <ProtectedRoute allowedRoles={['administrador','recepcionista']}>
+              <Layout>
+                <Diagnostico />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/historial"
+          element={
+            <ProtectedRoute allowedRoles={['administrador']}>
+              <Layout>
+                <Historial />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/estados"
+          element={
+            <ProtectedRoute allowedRoles={['administrador']}>
+              <Layout>
+                <Estados />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tipodeservicio"
+          element={
+            <ProtectedRoute allowedRoles={['administrador']}>
+              <Layout>
+                <TipodeServicio />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
           </>
 
-      /* <Route
-        path="/clientes"
-        element={
-          <ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
-            <Layout>
-              <Clientes />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/vehiculos"
-        element={
-          <ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
-            <Layout>
-              <Vehiculos />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/ordenes"
-        element={
-          <ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
-            <Layout>
-              <OrdenesServicio />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/mis-ordenes"
-        element={
-          <ProtectedRoute allowedRoles={['mecanico']}>
-            <Layout>
-              <MisOrdenes />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/inventario"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Inventario />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/facturacion"
-        element={
-          <ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
-            <Layout>
-              <Facturacion />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/usuarios"
-        element={
-          <ProtectedRoute allowedRoles={['administrador']}>
-            <Layout>
-              <Usuarios />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/configuracion"
-        element={
-          <ProtectedRoute allowedRoles={['administrador']}>
-            <Layout>
-              <Configuracion />
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path="*" element={<Navigate to="/dashboard" replace />} /> */}
+      }
     </Routes>
   );
 }

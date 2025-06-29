@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import type { AuthState, User } from '../types';
-
+import type { User, AuthState } from '../types';
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
@@ -71,12 +70,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // En un caso real, validarías el token con el servidor
       // Por ahora, simularemos un usuario autenticado
       const mockUser: User = {
-        id: '1',
-        nombre: 'Juan Pérez',
+        id: 1,
+        name: 'Juan Pérez',
+        lastName: 'P',
+        userName: 'as',
+        password: 'a',
         email: 'admin@autotaller.com',
-        telefono: '+1234567890',
         rol: 'administrador',
-        activo: true,
+        isActive: true,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -95,12 +96,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (email === 'admin@autotaller.com' && password === 'admin123') {
         const user: User = {
-          id: '1',
-          nombre: 'Juan Pérez',
+          id: 1,
+          name: 'Juan Pérez',
+          lastName: 'P',
+          userName: 'as',
+          password: 'a',
           email: 'admin@autotaller.com',
-          telefono: '+1234567890',
           rol: 'administrador',
-          activo: true,
+          isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
@@ -110,12 +113,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: 'LOGIN_SUCCESS', payload: { user, token } });
       } else if (email === 'recepcionista@autotaller.com' && password === 'recep123') {
         const user: User = {
-          id: '2',
-          nombre: 'María González',
+          id: 2,
+          name: 'María González',
+          lastName: 'P',
+          userName: 'as',
+          password: 'a',
           email: 'recepcionista@autotaller.com',
-          telefono: '+1234567891',
           rol: 'recepcionista',
-          activo: true,
+          isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
@@ -125,12 +130,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: 'LOGIN_SUCCESS', payload: { user, token } });
       } else if (email === 'mecanico@autotaller.com' && password === 'mec123') {
         const user: User = {
-          id: '3',
-          nombre: 'Carlos Rodríguez',
+          id: 3,
+          name: 'Carlos Rodríguez',
+          lastName: 'P',
+          userName: 'as',
+          password: 'a',
+          isActive: true,
           email: 'mecanico@autotaller.com',
-          telefono: '+1234567892',
           rol: 'mecanico',
-          activo: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };

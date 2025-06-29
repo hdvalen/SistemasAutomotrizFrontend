@@ -89,6 +89,13 @@ export function Usuarios() {
       await putUser(payload as User, selectedUsuario.id);
     } else {
       await postUser(payload as User);
+      Swal.fire({
+        icon: 'success',
+        title: 'Creado',
+        text: 'El usuario ha sido creado exitosamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
     setShowModal(false);
     const users = await getUser();

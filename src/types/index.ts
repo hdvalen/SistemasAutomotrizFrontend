@@ -8,6 +8,7 @@ export interface User {
   password: string;
   createdAt: string;
   updatedAt: string;
+  rol: string;
 }
 export type UserRol = {
   userId: number;
@@ -21,6 +22,7 @@ export interface Rol {
   updatedAt: string;
 }
 
+export type UserRole = 'administrador' | 'recepcionista' | 'mecanico';
 export interface AuthState {
   user: User | null;
   token: string | null;
@@ -55,39 +57,43 @@ export interface Vehicle {
   createdAt: string;
   updatedAt: string;
 }
+
 export interface TypeVehicle {
   id: number;
   name: string;
   createdAt: string;
   updatedAt: string;
 }
+
 export interface ServiceOrder {
   id: number;
-  VehiclesId: number;
-  TypeServiceId: number;
-  StateId: number;
-  EntryDate: Date;
-  ExitDate: Date;
-  IsAuthorized: boolean;
-  ClientMessage: string;
-  UserId: number;
-  User?: User;
+  vehiclesId: number;
+  typeServiceId: number;
+  stateId: number;
+  entryDate: string;
+  exitDate: string;
+  isAuthorized: boolean;
+  clientMessage: string;
+  userId: number;
+  user?: User;
+  vehicle?: Vehicle;
+  invoice?: Invoice;
+  state?: State;
+  typeService?: TypeService;
 }
 
-export type EstadoOrden = 'pendiente' | 'en_proceso' | 'completada' | 'cancelada';
-
-export interface RepuestoOrden {
-  id: string;
-  ordenId: string;
-  repuestoId: string;
-  cantidad: number;
-  precioUnitario: number;
-  subtotal: number;
-  SparePart?: SparePart;
+export interface State {
+  id: number;
+  name: string;
+  serviceOrder?: ServiceOrder;
 }
 
-export type EstadoFactura = 'pendiente' | 'pagada' | 'anulada';
-
+export interface TypeService {
+  id: number;
+  name: string;
+  duration: number;
+  price: number;
+}
 export interface DashboardStats {
   totalOrdenes: number;
   ordenesPendientes: number;
@@ -101,32 +107,75 @@ export interface DashboardStats {
 
 export interface Invoice {
   id: number;
-  ServiceOrderId: number;
-  TotalPrice: number;
-  Date: Date;
-  Code: string;
+  serviceOrder_Id: number;
+  totalPrice: number;
+  date: string;
+  code: string;
+  serviceOrder?: ServiceOrder;
 }
 
 export interface TypeVehicle {
   id: number;
   name: string;
 }
-
 export interface SparePart {
   id: number;
-  Code: string;
-  Description: string;
-  Stock: number;
-  MaxStock: number;
-  MiniStock: number;
-  UnitPrice: number;
-  Category: string;
+  code: string;
+  description: string;
+  stock: number;
+  maxStock: number;
+  miniStock: number;
+  unitPrice: number;
+  category: string;
 }
 
 export interface OrderDetails {
   id: number;
+  serviceOrderId: number;
+  sparePartId: number;
+  requiredPieces: number;
+  totalPrice: number;
+  serviceOrders?: ServiceOrder;
+  spareParts?: SparePart;
+}
+
+export interface Auditory {
+  id: number;
+  entityName: string;
+  changeType: string;
+  changeBy: string;
+  user: string;
+  date: string;
+}
+
+export interface Diagnostic {
+  id: number;
+  userId: number;
+  user?: User;
+  description: string;
+  date: string;
+}
+
+export interface DetailInspection {
+  id: number;
   ServiceOrderId: number;
-  SparePartId: number;
-  RequiredPieces: number;
-  TotalPrice: number;
+  InspectionId: number;
+  Quantity: number;
+}
+
+export interface Inspection {
+  id: number;
+  Name: string;
+}
+
+export interface Specialization {
+  id: number;
+  Name: string;
+}
+
+export interface TypeService {
+  id: number;
+  Name: string;
+  Duration: number;
+  Price: number;
 }
