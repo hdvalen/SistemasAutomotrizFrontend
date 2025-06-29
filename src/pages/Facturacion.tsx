@@ -434,58 +434,67 @@ export function Facturacion() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-neutral-200">
-                {ordenesPendientesFacturar
-                  .filter(so => {
-                    const estado = estados.find(e => e.id === so.stateId)?.name.toLowerCase() || '';
-                    const vehicle = getVehicleFromServiceOrder(so);
-                    const client = vehicle ? getClientFromVehicle(vehicle) : undefined;
-                    const search = searchTerm.toLowerCase();
-                    return (
-                      (!filterEstado || estado === filterEstado) &&
-                      (
-                        so.id.toString().includes(search) ||
-                        (vehicle && `${vehicle.brand} ${vehicle.model}`.toLowerCase().includes(search)) ||
-                        (client && `${client.name} ${client.lastName}`.toLowerCase().includes(search))
-                      )
-                    );
-                  })
-                  .map((so) => {
-                    const vehicle = getVehicleFromServiceOrder(so);
-                    const client = vehicle ? getClientFromVehicle(vehicle) : undefined;
-                    const estado = estados.find(e => e.id === so.stateId)?.name || 'N/A';
-                    return (
-                      <tr key={so.id} className="hover:bg-gradient-to-r hover:from-neutral-50 hover:to-neutral-100 transition-all duration-200">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-bold text-neutral-900">#{so.id}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-semibold text-neutral-900">
-                            {client ? `${client.name} ${client.lastName}` : 'Sin datos'}
-                          </div>
-                          <div className="text-sm text-neutral-500">
-                            {vehicle ? `${vehicle.brand} ${vehicle.model}` : 'Sin datos'}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-neutral-200 text-neutral-700">
-                            {estado}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-neutral-900">
-                            {new Date(so.entryDate).toLocaleDateString('es-ES')}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <Button size="sm" onClick={() => generateInvoiceFromServiceOrder(so)}>
-                            <Plus className="h-4 w-4 mr-1" /> Generar Factura
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
+              <tbody className="bg-zinc-900 divide-y divide-zinc-800">
+  {ordenesPendientesFacturar
+    .filter(so => {
+      const estado = estados.find(e => e.id === so.stateId)?.name.toLowerCase() || '';
+      const vehicle = getVehicleFromServiceOrder(so);
+      const client = vehicle ? getClientFromVehicle(vehicle) : undefined;
+      const search = searchTerm.toLowerCase();
+      return (
+        (!filterEstado || estado === filterEstado) &&
+        (
+          so.id.toString().includes(search) ||
+          (vehicle && `${vehicle.brand} ${vehicle.model}`.toLowerCase().includes(search)) ||
+          (client && `${client.name} ${client.lastName}`.toLowerCase().includes(search))
+        )
+      );
+    })
+    .map((so) => {
+      const vehicle = getVehicleFromServiceOrder(so);
+      const client = vehicle ? getClientFromVehicle(vehicle) : undefined;
+      const estado = estados.find(e => e.id === so.stateId)?.name || 'N/A';
+      return (
+        <tr
+          key={so.id}
+          className="hover:bg-zinc-800 transition-all duration-200"
+        >
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm font-bold text-zinc-100">#{so.id}</div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm font-semibold text-zinc-100">
+              {client ? `${client.name} ${client.lastName}` : 'Sin datos'}
+            </div>
+            <div className="text-sm text-zinc-400">
+              {vehicle ? `${vehicle.brand} ${vehicle.model}` : 'Sin datos'}
+            </div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-700 text-zinc-200">
+              {estado}
+            </span>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-zinc-300">
+              {new Date(so.entryDate).toLocaleDateString('es-ES')}
+            </div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            <Button
+              size="sm"
+              onClick={() => generateInvoiceFromServiceOrder(so)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center space-x-1"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Generar Factura</span>
+            </Button>
+          </td>
+        </tr>
+      );
+    })}
+</tbody>
+
             </table>
           </div>
           {ordenesPendientesFacturar.length === 0 && (

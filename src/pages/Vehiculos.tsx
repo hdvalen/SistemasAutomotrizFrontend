@@ -323,13 +323,6 @@ export function Vehiculos() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="text-blue-400 hover:text-white hover:bg-blue-600/20 p-2 rounded-lg transition-colors duration-150"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
                             onClick={() => handleEdit(vehiculo)}
                             className="text-purple-400 hover:text-white hover:bg-purple-600/20 p-2 rounded-lg transition-colors duration-150"
                           >
@@ -355,119 +348,121 @@ export function Vehiculos() {
 
 
         {/* Modal */}
-        {showModal && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-3xl shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {selectedVehiculo ? 'Editar Vehículo' : 'Nuevo Vehículo'}
-                </h2>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                  <Car className="h-4 w-4 text-white" />
-                </div>
-              </div>
+       {showModal && (
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-2xl p-8 w-full max-w-3xl shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto">
+      
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-bold text-gray-900">
+          {selectedVehiculo ? 'Editar Vehículo' : 'Nuevo Vehículo'}
+        </h2>
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
+          <Car className="h-4 w-4 text-white" />
+        </div>
+      </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Cliente</label>
-                  <Select
-                    name="clientId"
-                    value={formValues.clientId || ''}
-                    onChange={e => setFormValues(prev => ({
-                      ...prev,
-                      clientId: Number(e.target.value)
-                    }))}
-                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                  >
-                    <option value="">Seleccionar cliente</option>
-                    {clientes.map(cliente => (
-                      <option key={cliente.id} value={cliente.id}>
-                        {cliente.name} {cliente.lastName}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-semibold text-gray-800 mb-2">Cliente</label>
+          <Select
+            name="clientId"
+            value={formValues.clientId || ''}
+            onChange={e => setFormValues(prev => ({
+              ...prev,
+              clientId: Number(e.target.value)
+            }))}
+            className="w-full bg-white border-gray-300 text-gray-800 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          >
+            <option value="">Seleccionar cliente</option>
+            {clientes.map(cliente => (
+              <option key={cliente.id} value={cliente.id}>
+                {cliente.name} {cliente.lastName}
+              </option>
+            ))}
+          </Select>
+        </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Marca</label>
-                  <Input
-                    name="brand"
-                    value={formValues.brand || ''}
-                    onChange={handleInputChange}
-                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                  />
-                </div>
+        <div>
+          <label className="block text-sm font-semibold text-gray-800 mb-2">Marca</label>
+          <Input
+            name="brand"
+            value={formValues.brand || ''}
+            onChange={handleInputChange}
+            className="w-full bg-white border-gray-300 text-gray-800 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          />
+        </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Modelo</label>
-                  <Input
-                    name="model"
-                    value={formValues.model || ''}
-                    onChange={handleInputChange}
-                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                  />
-                </div>
+        <div>
+          <label className="block text-sm font-semibold text-gray-800 mb-2">Modelo</label>
+          <Input
+            name="model"
+            value={formValues.model || ''}
+            onChange={handleInputChange}
+            className="w-full bg-white border-gray-300 text-gray-800 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          />
+        </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">VIN</label>
-                  <Input
-                    name="vin"
-                    value={formValues.vin || ''}
-                    onChange={handleInputChange}
-                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                  />
-                </div>
+        <div>
+          <label className="block text-sm font-semibold text-gray-800 mb-2">VIN</label>
+          <Input
+            name="vin"
+            value={formValues.vin || ''}
+            onChange={handleInputChange}
+            className="w-full bg-white border-gray-300 text-gray-800 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          />
+        </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Kilometraje</label>
-                  <Input
-                    type="number"
-                    name="mileage"
-                    value={formValues.mileage || ''}
-                    onChange={handleInputChange}
-                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                  />
-                </div>
+        <div>
+          <label className="block text-sm font-semibold text-gray-800 mb-2">Kilometraje</label>
+          <Input
+            type="number"
+            name="mileage"
+            value={formValues.mileage || ''}
+            onChange={handleInputChange}
+            className="w-full bg-white border-gray-300 text-gray-800 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          />
+        </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo Vehículo</label>
-                  <Select
-                    name="typeVehicleId"
-                    value={formValues.typeVehicleId || ''}
-                    onChange={e => setFormValues(prev => ({
-                      ...prev,
-                      typeVehicleId: Number(e.target.value)
-                    }))}
-                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
-                  >
-                    <option value="">Seleccionar tipo vehículo</option>
-                    {typesVehicles.map(type => (
-                      <option key={type.id} value={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
-              </div>
+        <div>
+          <label className="block text-sm font-semibold text-gray-800 mb-2">Tipo Vehículo</label>
+          <Select
+            name="typeVehicleId"
+            value={formValues.typeVehicleId || ''}
+            onChange={e => setFormValues(prev => ({
+              ...prev,
+              typeVehicleId: Number(e.target.value)
+            }))}
+            className="w-full bg-white border-gray-300 text-gray-800 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          >
+            <option value="">Seleccionar tipo vehículo</option>
+            {typesVehicles.map(type => (
+              <option key={type.id} value={type.id}>
+                {type.name}
+              </option>
+            ))}
+          </Select>
+        </div>
+      </div>
 
-              <div className="flex justify-end space-x-4 mt-10 pt-6 border-t border-gray-200">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowModal(false)}
-                  className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 rounded-lg transition-colors duration-150"
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  onClick={handleSubmit}
-                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105"
-                >
-                  {selectedVehiculo ? 'Actualizar' : 'Crear'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+      <div className="flex justify-end space-x-4 mt-10 pt-6 border-t border-gray-200">
+        <Button
+          variant="outline"
+          onClick={() => setShowModal(false)}
+          className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+        >
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg shadow-lg transition-transform transform hover:scale-105"
+        >
+          {selectedVehiculo ? 'Actualizar' : 'Crear'}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );

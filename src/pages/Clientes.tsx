@@ -194,9 +194,6 @@ export function Clientes() {
               <td className="px-6 py-4 text-sm text-zinc-400 whitespace-nowrap">{cliente.identification}</td>
               <td className="px-6 py-4 text-right whitespace-nowrap">
                 <div className="flex justify-end space-x-2">
-                  <Button variant="ghost" size="sm" className="hover:bg-purple-800 text-purple-300">
-                    <Eye className="h-4 w-4" />
-                  </Button>
                   <Button variant="ghost" size="sm" onClick={() => handleEdit(cliente)} className="hover:bg-indigo-800 text-indigo-300">
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -216,30 +213,78 @@ export function Clientes() {
 
         {/* Modal */}
         {showModal && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-xl shadow-[0_15px_60px_rgba(0,0,0,0.3)] border border-gray-200 max-h-[90vh] overflow-y-auto transition-all duration-300 scale-100">
-              <h2 className="text-2xl font-bold text-indigo-700 mb-6">
-                {selectedCliente ? 'Editar Cliente' : 'Nuevo Cliente'}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Input label="Nombre" name="name" value={formValues.name || ''} onChange={handleInputChange} />
-                <Input label="Apellido" name="lastName" value={formValues.lastName || ''} onChange={handleInputChange} />
-                <Input label="Email" type="email" name="email" value={formValues.email || ''} onChange={handleInputChange} />
-                <Input label="Teléfono" name="phone" value={formValues.phone || ''} onChange={handleInputChange} />
-                <Input label="Identificación" name="identification" value={formValues.identification || ''} onChange={handleInputChange} />
-                <Input label="Nacimiento" type="date" name="birth" value={formValues.birth || ''} onChange={handleInputChange} />
-              </div>
-              <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
-                <Button variant="outline" onClick={() => setShowModal(false)} className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-50 rounded-lg transition-colors duration-150">
-                  Cancelar
-                </Button>
-                <Button onClick={handleSubmit} className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                  {selectedCliente ? 'Actualizar' : 'Crear'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+  <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-2xl p-8 w-full max-w-xl shadow-xl border border-gray-200 max-h-[90vh] overflow-y-auto transition-all duration-300 scale-100">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        {selectedCliente ? 'Editar Cliente' : 'Nuevo Cliente'}
+      </h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Input
+          label="Nombre"
+          name="name"
+          value={formValues.name || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300"
+        />
+        <Input
+          label="Apellido"
+          name="lastName"
+          value={formValues.lastName || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300"
+        />
+        <Input
+          label="Email"
+          type="email"
+          name="email"
+          value={formValues.email || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300"
+        />
+        <Input
+          label="Teléfono"
+          name="phone"
+          value={formValues.phone || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300"
+        />
+        <Input
+          label="Identificación"
+          name="identification"
+          value={formValues.identification || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300"
+        />
+        <Input
+          label="Nacimiento"
+          type="date"
+          name="birth"
+          value={formValues.birth || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300"
+        />
+      </div>
+
+      <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
+        <Button
+          variant="outline"
+          onClick={() => setShowModal(false)}
+          className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+        >
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-lg transition-transform transform hover:scale-105"
+        >
+          {selectedCliente ? 'Actualizar' : 'Crear'}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );

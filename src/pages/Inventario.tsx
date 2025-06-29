@@ -192,7 +192,7 @@ export function Inventario() {
           
         </div>
        
-
+        {/*Main Inventory Table*/}
         <Card className="bg-zinc-900 border border-zinc-700 shadow-xl ">
           <CardHeader className="bg-gradient-to-r  to-indigo-900 border-b border-zinc-700" >
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -311,85 +311,89 @@ export function Inventario() {
 
 
         {/* Modal */}
-        {showModal && (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl p-8 w-full max-w-2xl shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto">
-              <h2 className="text-xl font-bold text-gray-800 mb-6">
-                {selectedRepuesto ? 'Editar Repuesto' : 'Nuevo Repuesto'}
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input
-                  label="Código"
-                  name="code"
-                  value={formValues.code || ''}
-                  onChange={handleInputChange}
-                  className="bg-white border-gray-300 text-gray-800"
-                />
-                <Input
-                  label="Descripción"
-                  name="description"
-                  value={formValues.description || ''}
-                  onChange={handleInputChange}
-                  className="bg-white border-gray-300 text-gray-800"
-                />
-                <Input
-                  label="Categoria"
-                  name="category"
-                  value={formValues.category || ''}
-                  onChange={handleInputChange}
-                  className="bg-white border-gray-300 text-gray-800"
-                />
-                <Input
-                  label="Stock Actual"
-                  type="number"
-                  name="stock"
-                  value={formValues.stock || 0}
-                  onChange={handleInputChange}
-                  className="bg-white border-gray-300 text-gray-800"
-                />
-                <Input
-                  label="Stock Mínimo"
-                  type="number"
-                  name="miniStock"
-                  value={formValues.miniStock || 0}
-                  onChange={handleInputChange}
-                  className="bg-white border-gray-300 text-gray-800"
-                />
-                <Input
-                  label="Stock Máximo"
-                  type="number"
-                  name="maxStock"
-                  value={formValues.maxStock || 0}
-                  onChange={handleInputChange}
-                  className="bg-white border-gray-300 text-gray-800"
-                />
-                <Input
-                  label="Precio Compra"
-                  type="number"
-                  name="unitPrice"
-                  value={formValues.unitPrice || 0}
-                  onChange={handleInputChange}
-                  className="bg-white border-gray-300 text-gray-800"
-                />
-              </div>
-              <div className="flex justify-end space-x-3 mt-8">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowModal(false)}
-                  className="border-gray-400 text-gray-600 hover:bg-gray-100"
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  onClick={handleSubmit}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                >
-                  {selectedRepuesto ? 'Actualizar' : 'Crear'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+       {showModal && (
+  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-white rounded-2xl p-8 w-full max-w-2xl shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto">
+      
+      <h2 className="text-xl font-bold text-gray-900 mb-6">
+        {selectedRepuesto ? 'Editar Repuesto' : 'Nuevo Repuesto'}
+      </h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Input
+          label="Código"
+          name="code"
+          value={formValues.code || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        />
+        <Input
+          label="Descripción"
+          name="description"
+          value={formValues.description || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        />
+        <Input
+          label="Categoría"
+          name="category"
+          value={formValues.category || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        />
+        <Input
+          label="Stock Actual"
+          type="number"
+          name="stock"
+          value={formValues.stock || 0}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        />
+        <Input
+          label="Stock Mínimo"
+          type="number"
+          name="miniStock"
+          value={formValues.miniStock || 0}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        />
+        <Input
+          label="Stock Máximo"
+          type="number"
+          name="maxStock"
+          value={formValues.maxStock || 0}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        />
+        <Input
+          label="Precio Compra"
+          type="number"
+          name="unitPrice"
+          value={formValues.unitPrice || 0}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        />
+      </div>
+
+      <div className="flex justify-end space-x-3 mt-8 pt-4 border-t border-gray-200">
+        <Button
+          variant="outline"
+          onClick={() => setShowModal(false)}
+          className="px-6 py-2 border-gray-300 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+        >
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg shadow-lg transition-transform transform hover:scale-105"
+        >
+          {selectedRepuesto ? 'Actualizar' : 'Crear'}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
 
       </div>
     </div>

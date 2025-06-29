@@ -72,43 +72,33 @@ export function Historial() {
                     <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                       Tipo de Cambio
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
-                      Cambiado por
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
-                      Fecha
-                    </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-neutral-200">
-                {filteredAuditories.map((audit) => (
-                  <tr key={audit.id} className="hover:bg-gradient-to-r hover:from-neutral-50 hover:to-neutral-100 transition-all duration-200">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center shadow-medium">
-                          <span className="text-sm font-bold text-white">
-                            {audit.entityName.charAt(0)}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-semibold text-neutral-900">{audit.entityName}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-semibold text-neutral-900">{audit.changeType}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-neutral-900">{audit.user}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
-                    {audit.date 
-                      ? new Date(audit.date).toLocaleString('es-CO', { timeZone: 'America/Bogota' })
-                      : 'Sin hora'}
-                  </td>
-                  </tr>
-                ))}
-              </tbody>
+               <tbody className="bg-zinc-900 divide-y divide-zinc-800">
+  {filteredAuditories.map((audit) => (
+    <tr
+      key={audit.id}
+      className="hover:bg-zinc-800 transition-all duration-200"
+    >
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center">
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center shadow-md">
+            <span className="text-sm font-bold text-white">
+              {audit.entityName.charAt(0)}
+            </span>
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm font-semibold text-zinc-100">{audit.entityName}</div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm font-semibold text-zinc-100">{audit.changeType}</div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
               </table>
             </div>
           </CardContent>

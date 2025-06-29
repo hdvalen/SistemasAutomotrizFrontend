@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
-import { Plus, Search, Edit, Eye, Clock, CheckCircle } from 'lucide-react';
+import { Plus, Search, Edit, Eye, Clock, CheckCircle, Trash2 } from 'lucide-react';
 import type { ServiceOrder, SparePart, OrderDetails, State, Client, Vehicle } from '../types';
 import { getOrderDetails, putOrderDetails, deleteOrderDetails } from '../Apis/OrderDetailsApis';
 import { getServiceOrder, generateServiceOrder } from '../Apis/ServiceOrder';
@@ -382,103 +382,146 @@ export function DetallesOrden() {
                         </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-neutral-200">
-                        {filteredDetalles.map((detalle) => {
-                            return (
-                            <tr key={detalle.id} className="hover:bg-gradient-to-r hover:from-neutral-50 hover:to-neutral-100 transition-all duration-200">
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                <div>
-                                    <div className="text-sm font-bold text-neutral-900">{detalle.id}</div>
-                                </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                <div>
-                                    <div className="text-sm font-semibold text-neutral-900">
-                                    {getClientFromOrderDetail(detalle)?.name || 'N/A'} {getClientFromOrderDetail(detalle)?.lastName || ''}
-                                    </div>
-                                    <div className="text-sm text-neutral-500">
-                                    {getVehicleFromOrderDetail(detalle)?.brand || ''} • {getVehicleFromOrderDetail(detalle)?.vin || ''}
-                                    </div>
-                                </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-neutral-200 text-neutral-700">
-                                    {getSparePartName(detalle.sparePartId)}
-                                </span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-bold text-neutral-900">
-                                    {detalle.requiredPieces}
-                                </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-bold text-neutral-900">
-                                    {detalle.totalPrice}
-                                </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <div className="flex items-center justify-end space-x-2">
-                                    <Button variant="ghost" size="sm" className="hover:bg-accent-50 hover:text-accent-600" onClick={() => handleEdit(detalle)}>
-                                    <Eye className="h-4 w-4" />
-                                    </Button>
-                                    <Button variant="ghost" size="sm" onClick={() => handleDelete(detalle.id)} className="hover:bg-primary-50 hover:text-primary-600">
-                                    <Edit className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                                </td>
-                            </tr>
-                            );
-                        })}
-                        </tbody>
+                    <tbody className="bg-zinc-900 divide-y divide-zinc-800">
+  {filteredDetalles.map((detalle) => {
+    return (
+      <tr
+        key={detalle.id}
+        className="hover:bg-zinc-800 transition-colors duration-150"
+      >
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div>
+            <div className="text-sm font-bold text-zinc-300">{detalle.id}</div>
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div>
+            <div className="text-sm font-semibold text-white">
+              {getClientFromOrderDetail(detalle)?.name || 'N/A'}{' '}
+              {getClientFromOrderDetail(detalle)?.lastName || ''}
+            </div>
+            <div className="text-sm text-zinc-400">
+              {getVehicleFromOrderDetail(detalle)?.brand || ''} •{' '}
+              {getVehicleFromOrderDetail(detalle)?.vin || ''}
+            </div>
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-700 text-zinc-200">
+            {getSparePartName(detalle.sparePartId)}
+          </span>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div className="text-sm font-bold text-zinc-300">
+            {detalle.requiredPieces}
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div className="text-sm font-bold text-zinc-300">
+            {detalle.totalPrice}
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <div className="flex items-center justify-end space-x-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hover:bg-zinc-700 text-zinc-300 hover:text-white"
+              onClick={() => handleEdit(detalle)}
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDelete(detalle.id)}
+              className="hover:bg-red-600/20 text-red-400 hover:text-red-500"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
                     </table>
                 </div>
             </CardContent>
         </Card>
 
-        {showModal && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-strong border border-neutral-200">
-                <h2 className="text-xl font-bold text-neutral-900 mb-6">
-                    {selectedDetalles ? 'Editar Detalle' : 'Nuevo Detalle'}
-                </h2>
-                <div className="space-y-4">
-                    <Select label="Orden de Servicio" name="serviceOrderId" value={formValues.serviceOrderId || ''} onChange={e => setFormValues(prev => ({
-                            ...prev,
-                            serviceOrderId: Number(e.target.value)
-                        }))}
-                        className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
-                        <option value="">Seleccionar Orden de Servicio</option>
-                        {ordenes.map(r => (
-                        <option key={r.id} value={r.id}>
-                            {r.id} {r.entryDate}
-                        </option>
-                        ))}
-                    </Select>
-                    <Input label="Piezas Requeridas" type="number" name="requiredPieces" value={formValues.requiredPieces || ''} onChange={handleInputChange}/>
-                    <Select label="Repuesto" name="sparePartId" value={formValues.sparePartId || ''} onChange={e => setFormValues(prev => ({
-                            ...prev,
-                            sparePartId: Number(e.target.value)
-                        }))}
-                        className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
-                        <option value="">Seleccionar repuesto</option>
-                        {repuestos.map(r => (
-                        <option key={r.id} value={r.id}>
-                            {r.description}
-                        </option>
-                        ))}
-                    </Select>
-                </div>
-                <div className="flex justify-end space-x-3 mt-8">
-                    <Button variant="outline" onClick={() => setShowModal(false)}>
-                    Cancelar
-                    </Button>
-                    <Button onClick={handleSubmit}>
-                    {selectedDetalles ? 'Actualizar' : 'Crear'}
-                    </Button>
-                </div>
-                </div>
-            </div>
-            )}
+       {showModal && (
+  <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-lg border border-gray-200">
+      <h2 className="text-xl font-bold text-gray-900 mb-6">
+        {selectedDetalles ? 'Editar Detalle' : 'Nuevo Detalle'}
+      </h2>
+      <div className="space-y-4">
+        <Select
+          label="Orden de Servicio"
+          name="serviceOrderId"
+          value={formValues.serviceOrderId || ''}
+          onChange={(e) =>
+            setFormValues((prev) => ({
+              ...prev,
+              serviceOrderId: Number(e.target.value),
+            }))
+          }
+          className="w-full bg-white border-gray-300 text-gray-800 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        >
+          <option value="">Seleccionar Orden de Servicio</option>
+          {ordenes.map((r) => (
+            <option key={r.id} value={r.id}>
+              {r.id} {r.entryDate}
+            </option>
+          ))}
+        </Select>
+
+        <Input
+          label="Piezas Requeridas"
+          type="number"
+          name="requiredPieces"
+          value={formValues.requiredPieces || ''}
+          onChange={handleInputChange}
+          className="bg-white text-gray-800"
+        />
+
+        <Select
+          label="Repuesto"
+          name="sparePartId"
+          value={formValues.sparePartId || ''}
+          onChange={(e) =>
+            setFormValues((prev) => ({
+              ...prev,
+              sparePartId: Number(e.target.value),
+            }))
+          }
+          className="w-full bg-white border-gray-300 text-gray-800 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        >
+          <option value="">Seleccionar repuesto</option>
+          {repuestos.map((r) => (
+            <option key={r.id} value={r.id}>
+              {r.description}
+            </option>
+          ))}
+        </Select>
+      </div>
+
+      <div className="flex justify-end space-x-3 mt-8">
+        <Button variant="outline" onClick={() => setShowModal(false)} className="text-gray-700 border-gray-300 hover:bg-gray-100">
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105"
+        >
+          {selectedDetalles ? 'Actualizar' : 'Crear'}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
         </div>
     );
 }
