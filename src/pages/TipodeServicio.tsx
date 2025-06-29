@@ -171,7 +171,7 @@ export function TipodeServicio() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="overflow-x-auto">
+                    <div >
                         <table className="min-w-full divide-y divide-neutral-200">
                             <thead className="bg-gradient-to-r from-neutral-50 to-neutral-100">
                             <tr>

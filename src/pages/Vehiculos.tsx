@@ -177,7 +177,7 @@ export function Vehiculos() {
 
   return (
 
-    <div className="min-h-screen bg-zinc-900 py-8 px-4 sm:px-6 lg:px-8 text-zinc-100 overflow-hidden">
+    <div className="min-h-screen bg-zinc-900 py-8 px-4 sm:px-6 lg:px-8 text-zinc-100 ">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between bg-zinc-800 rounded-xl p-6 shadow-lg border border-zinc-700">

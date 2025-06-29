@@ -159,7 +159,7 @@ export function Clientes() {
     </div>
   </CardHeader>
   <CardContent className="p-0">
-    <div className="overflow-x-auto">
+    <div>
       <table className="min-w-full divide-y divide-zinc-700">
         <thead className="bg-gradient-to-r from-zinc-800 to-zinc-700">
           <tr>

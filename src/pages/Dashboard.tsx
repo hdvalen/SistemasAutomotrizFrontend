@@ -34,7 +34,7 @@ interface StatCardProps {
 
 function StatCard({ title, value, icon: Icon, gradient}: StatCardProps) {
   return (
-    <Card className="overflow-hidden shadow-lg rounded-2xl border border-zinc-700 bg-zinc-900 transition-transform hover:scale-[1.01] duration-200">
+    <Card className="shadow-lg rounded-2xl border border-zinc-700 bg-zinc-900 transition-transform hover:scale-[1.01] duration-200">
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
         <div>

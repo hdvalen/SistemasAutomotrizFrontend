@@ -62,7 +62,7 @@ export function Sidebar() {
         </span>
       </div>
       
-      <nav className="flex-1 px-3 py-6 space-y-2">
+      <nav className="flex-1 px-3 py-6 ">
         {userNavigation.map((item) => (
           <NavLink
             key={item.name}

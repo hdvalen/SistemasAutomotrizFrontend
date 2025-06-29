@@ -262,7 +262,7 @@ export function DetallesOrden() {
     }
 
     return (
-    <div className="min-h-screen bg-zinc-900 py-8 px-4 sm:px-6 lg:px-8 text-zinc-100 overflow-hidden">
+    <div className="min-h-screen bg-zinc-900 py-8 px-4 sm:px-6 lg:px-8 text-zinc-100 ">
             <div className="max-w-7xl mx-auto space-y-5">
             {/* header */}
             <div className="flex items-center justify-between bg-zinc-800 rounded-xl p-6 shadow-lg border border-zinc-700">
@@ -274,15 +274,15 @@ export function DetallesOrden() {
               Administra tus ordenes de servicio 
             </p>
           </div>
-            </div>
             <Button onClick={handleCreate} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105">
                 <Plus className="h-5 w-5 mr-2" />
                 Nuevo Detalle de Orden
             </Button>
         </div>
+        </div>
         
         {/*stats cards*/}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
             <Card className='bg-zinc-800 border border-zinc-700 shadow-lg hover:shadow-xl transition-shadow duration-200'>
                 <CardContent className="p-6">
                 <div className="flex items-center justify-between">
