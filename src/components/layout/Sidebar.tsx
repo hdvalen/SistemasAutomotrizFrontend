@@ -16,7 +16,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { clsx } from 'clsx';
 
 const navigation = {
-  administrador: [
+  Administrator: [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
     { name: 'Clientes', href: '/clientes', icon: Users },
     { name: 'Vehículos', href: '/vehiculos', icon: Car },
@@ -29,14 +29,14 @@ const navigation = {
     { name: 'Estados', href: '/estados', icon: Users },
     { name: 'Servicios', href: '/tipodeservicio', icon: Settings },
   ],
-  recepcionista: [
+  Recepcionist: [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
     { name: 'Clientes', href: '/clientes', icon: Users },
     { name: 'Vehículos', href: '/vehiculos', icon: Car },
     { name: 'Órdenes de Servicio', href: '/ordenes', icon: ClipboardList },
     { name: 'Diagnostico', href: '/diagnostico', icon: Calendar},
   ],
-  mecanico: [
+  Mechanic: [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
     { name: 'Órdenes de Servicio', href: '/ordenes', icon: ClipboardList },
     { name: 'Facturación', href: '/facturacion', icon: FileText },
@@ -49,7 +49,7 @@ export function Sidebar() {
   
   if (!user) return null;
 
-  const userNavigation = navigation[user.rol as 'administrador' | 'recepcionista' | 'mecanico'] || [];
+  const userNavigation = navigation[user.rol as 'Administrator' | 'Recepcionist' | 'Mechanic'] || [];
 
   return (
     <div className="flex flex-col w-64 bg-gradient-to-b from-neutral-900 via-neutral-800 to-neutral-900 text-white shadow-strong">
@@ -87,12 +87,12 @@ export function Sidebar() {
           <div className="flex-shrink-0">
             <div className="h-10 w-10 rounded-xl bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center shadow-medium">
               <span className="text-sm font-bold text-white">
-                {user.name.charAt(0).toUpperCase()}
+                {user.name ? user.name.charAt(0).toUpperCase() : ''}
               </span>
             </div>
           </div>
           <div className="ml-3">
-            <p className="text-sm font-semibold text-white">{user.name}</p>
+            <p className="text-sm font-semibold text-white">{user.userName}</p>
             <p className="text-xs text-neutral-400 capitalize">{user.rol}</p>
           </div>
         </div>

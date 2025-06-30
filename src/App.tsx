@@ -31,13 +31,15 @@ function AppRoutes() {
   <Route
     path="/dashboard"
     element={
-      <ProtectedRoute>
+
+      <ProtectedRoute allowedRoles={['Administrator', 'Recepcionist', 'Mechanic']}>
         <Layout>
           <Dashboard />
         </Layout>
       </ProtectedRoute>
     }
   />
+
   <Route
     path="/homepages"
     element={
@@ -51,13 +53,13 @@ function AppRoutes() {
       {
         <><Route
           path="/clientes"
-          element={<ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
+          element={<ProtectedRoute allowedRoles={['Administrator', 'Recepcionist']}>
             <Layout>
               <Clientes />
             </Layout>
           </ProtectedRoute>} /><Route
             path="/vehiculos"
-            element={<ProtectedRoute allowedRoles={['administrador', 'recepcionista']}>
+            element={<ProtectedRoute allowedRoles={['Administrator', 'Recepcionist']}>
               <Layout>
                 <Vehiculos />
               </Layout>
@@ -65,7 +67,7 @@ function AppRoutes() {
             <Route
                 path="/inventario"
                 element={
-                  <ProtectedRoute allowedRoles={['administrador']}>
+                  <ProtectedRoute allowedRoles={['Administrator']}>
                     <Layout>
                       <Inventario />
                     </Layout>
@@ -75,7 +77,7 @@ function AppRoutes() {
               <Route
                 path="/facturacion"
                 element={
-                  <ProtectedRoute allowedRoles={['administrador', 'mecanico']}>
+                  <ProtectedRoute allowedRoles={['Administrator', 'Mechanic']}>
                     <Layout>
                       <Facturacion />
                     </Layout>
@@ -85,7 +87,7 @@ function AppRoutes() {
             <Route
             path="/usuarios"
             element={
-              <ProtectedRoute allowedRoles={['administrador']}>
+              <ProtectedRoute allowedRoles={['Administrator']}>
                 <Layout>
                   <Usuarios />
                 </Layout>
@@ -95,7 +97,7 @@ function AppRoutes() {
             <Route
           path="/ordenes"
           element={
-            <ProtectedRoute allowedRoles={['administrador', 'recepcionista', 'mecanico']}>
+            <ProtectedRoute allowedRoles={['Administrator', 'Recepcionist', 'Mechanic']}>
               <Layout>
                 <OrdenesServicio />
               </Layout>
@@ -105,7 +107,7 @@ function AppRoutes() {
         <Route
           path="/ordenDetalles"
           element={
-            <ProtectedRoute allowedRoles={['administrador', 'mecanico']}>
+            <ProtectedRoute allowedRoles={['Administrator', 'Mechanic']}>
               <Layout>
                 <DetallesOrden />
               </Layout>
@@ -115,7 +117,7 @@ function AppRoutes() {
         <Route
           path="/diagnostico"
           element={
-            <ProtectedRoute allowedRoles={['administrador','recepcionista']}>
+            <ProtectedRoute allowedRoles={['Administrator','Recepcionist']}>
               <Layout>
                 <Diagnostico />
               </Layout>
@@ -125,7 +127,7 @@ function AppRoutes() {
         <Route
           path="/historial"
           element={
-            <ProtectedRoute allowedRoles={['administrador']}>
+            <ProtectedRoute allowedRoles={['Administrator']}>
               <Layout>
                 <Historial />
               </Layout>
@@ -135,7 +137,7 @@ function AppRoutes() {
         <Route
           path="/estados"
           element={
-            <ProtectedRoute allowedRoles={['administrador']}>
+            <ProtectedRoute allowedRoles={['Administrator']}>
               <Layout>
                 <Estados />
               </Layout>
@@ -145,7 +147,7 @@ function AppRoutes() {
         <Route
           path="/tipodeservicio"
           element={
-            <ProtectedRoute allowedRoles={['administrador']}>
+            <ProtectedRoute allowedRoles={['Administrator']}>
               <Layout>
                 <TipodeServicio />
               </Layout>

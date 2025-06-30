@@ -1,15 +1,34 @@
 export interface User {
-  isActive: unknown;
+  id: number;
+  name?: string;
+  lastName?: string;
+  userName: string;
+  email: string;
+  password: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  rol: UserRole;
+}
+
+
+export interface DataUserDto {
   id: number;
   name: string;
   lastName: string;
   userName: string;
   email: string;
-  password: string;
-  createdAt: string;
-  updatedAt: string;
-  rol: string;
+  token: string;
+  refreshToken: string;
+  isAuthenticated: boolean;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  rols: UserRole;
+  message?: string;
 }
+
+
 export type UserRol = {
   userId: number;
   rolId: number;
@@ -22,7 +41,7 @@ export interface Rol {
   updatedAt: string;
 }
 
-export type UserRole = 'administrador' | 'recepcionista' | 'mecanico';
+export type UserRole = 'Administrator' | 'Recepcionist' | 'Mechanic';
 export interface AuthState {
   user: User | null;
   token: string | null;

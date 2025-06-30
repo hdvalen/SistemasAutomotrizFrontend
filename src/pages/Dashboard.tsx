@@ -50,9 +50,17 @@ function StatCard({ title, value, icon: Icon, gradient}: StatCardProps) {
 
   );
 }
-
 export function Dashboard() {
   const { user } = useAuth();
+  alert("Entrando al dashboard...");  
+  console.log("📦 Dashboard montado");       // ✅ Aparece al entrar al componente
+  console.log("🧑 Usuario desde Auth:", user); // ✅ Revisa qué trae
+
+  if (!user?.rol) {
+    return <div className="text-white p-8">Cargando datos del usuario...</div>;
+  }
+
+
   const [ordenes, setOrdenes] = useState<ServiceOrder[]>([]);
   const [facturas, setFacturas] = useState<Invoice[]>([]);
   const [clientes, setClientes] = useState<Client[]>([]);
@@ -60,47 +68,50 @@ export function Dashboard() {
   const [estados, setStates] = useState<State[]>([]);
   const [diagnosticos, setDiagnostico] = useState<Diagnostic[]>([]);
   const [repuestos, setRepuestos] = useState<SparePart[]>([]);
-  useEffect(() => {
-      getServiceOrder().then((data) => {
-        if (data) setOrdenes(data);
-      });
-    }, []);
 
+  // ✅ Se agregan .catch en todos los useEffect para capturar errores
   useEffect(() => {
-      getInvoice().then((data) => {
-        if (data) setFacturas(data);
-      });
-    }, []);
-
-  useEffect(() => {
-    getClient().then((data) => {
-      if (data) setClientes(data);
-    });
+    getServiceOrder()
+      .then((data) => { if (data) setOrdenes(data); })
+      .catch((err) => console.error("❌ Error órdenes:", err));
   }, []);
 
   useEffect(() => {
-    getVehicle().then((data) => {
-      if (data) setVehiculos(data);
-    });
+    getInvoice()
+      .then((data) => { if (data) setFacturas(data); })
+      .catch((err) => console.error("❌ Error facturas:", err));
   }, []);
 
   useEffect(() => {
-    getState().then((data) => {
-      if (data) setStates(data);
-    });
+    getClient()
+      .then((data) => { if (data) setClientes(data); })
+      .catch((err) => console.error("❌ Error clientes:", err));
   }, []);
 
   useEffect(() => {
-    getDiagnostic().then((data) => {
-      if (data) setDiagnostico(data);
-    });
+    getVehicle()
+      .then((data) => { if (data) setVehiculos(data); })
+      .catch((err) => console.error("❌ Error vehículos:", err));
   }, []);
 
   useEffect(() => {
-    getSpareParts().then((data) => {
-      if (data) setRepuestos(data);
-    });
+    getState()
+      .then((data) => { if (data) setStates(data); })
+      .catch((err) => console.error("❌ Error estados:", err));
   }, []);
+
+  useEffect(() => {
+    getDiagnostic()
+      .then((data) => { if (data) setDiagnostico(data); })
+      .catch((err) => console.error("❌ Error diagnósticos:", err));
+  }, []);
+
+  useEffect(() => {
+    getSpareParts()
+      .then((data) => { if (data) setRepuestos(data); })
+      .catch((err) => console.error("❌ Error repuestos:", err));
+  }, []);
+
 
   const getOrdenesEnProceso = () => {
     return ordenes.filter(orden => {
@@ -143,7 +154,7 @@ export function Dashboard() {
 
   const getStatsForRole = () => {
     switch (user?.rol) {
-      case 'administrador':
+      case 'Administrator':
         return [
           {
             title: 'Total Órdenes',
@@ -171,7 +182,7 @@ export function Dashboard() {
           },
         ];
 
-      case 'recepcionista':
+      case 'Recepcionist':
         return [
           {
             title: 'Órdenes Pendientes',
@@ -199,7 +210,7 @@ export function Dashboard() {
           },
         ];
 
-      case 'mecanico':
+      case 'Mechanic':
         return [
           {
             title: 'Órdenes Pendientes',
@@ -263,7 +274,7 @@ export function Dashboard() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-4xl font-extrabold text-white">
-            Bienvenido, {user?.name}
+            Bienvenido, {user?.userName}
           </h1>
           <p className="text-gray-400 mt-1 text-base">Gestiona tu taller de manera eficiente</p>
         </div>

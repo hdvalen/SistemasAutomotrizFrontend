@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.0.0",
-    "@types/react-router-dom": "^5.3.3",
     "clsx": "^2.1.1",
     "lucide-react": "^0.523.0",
     "react": "^19.1.0",
@@ -23,6 +22,7 @@
     "@eslint/js": "^9.29.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.5.2",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.29.0",

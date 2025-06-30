@@ -1,4 +1,3 @@
-import React from 'react';
 import { Bell, Search } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -36,7 +35,7 @@ export function Header() {
         </div>
         <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-500 flex items-center justify-center shadow-md">
           <span className="text-sm font-bold text-white">
-            {user?.name.charAt(0).toUpperCase()}
+            {user?.name?.charAt(0)?.toUpperCase() ?? ''}
           </span>
             </div>
           </div>
