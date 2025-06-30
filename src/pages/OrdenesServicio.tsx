@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
-import { AlertCircle, Plus, Search, Edit, Eye, Clock, CheckCircle, AlertTriangle, XCircle, CreditCardIcon, FileText } from 'lucide-react';
+import { AlertCircle, Plus, Search, Edit,  Clock, CheckCircle, AlertTriangle, XCircle, CreditCardIcon, FileText, Trash2 } from 'lucide-react';
 import type { ServiceOrder, Client, Vehicle, User, SparePart, State, TypeService} from '../types';
 import { getServiceOrder, postServiceOrder, putServiceOrder, deleteServiceOrder } from '../Apis/ServiceOrder';
 import { getVehicle } from '../Apis/vehiclesApis';
@@ -383,58 +383,71 @@ export function OrdenesServicio() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-neutral-200">
-                {filteredOrdenes.map((orden) => {
-                  const estadoName = getStateName(orden.stateId);
-                  const EstadoIcon = AlertCircle;
-                  return (
-                    <tr key={orden.id} className="hover:bg-gradient-to-r hover:from-neutral-50 hover:to-neutral-100 transition-all duration-200">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-bold text-neutral-900">{orden.id}</div>
-                          <div className="text-sm text-neutral-500">
-                            {orden.entryDate}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-semibold text-neutral-900">
-                            {getClientFromOrder(orden)?.name || 'N/A'} {getClientFromOrder(orden)?.lastName || ''}
-                          </div>
-                          <div className="text-sm text-neutral-500">
-                            {getVehicleFromOrder(orden)?.brand || ''} • {getVehicleFromOrder(orden)?.vin || ''}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-neutral-900">{getUserFromOrder(orden)?.name || 'N/A'} {getUserFromOrder(orden)?.lastName || ''}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-neutral-200 text-neutral-700">
-                          <EstadoIcon className="h-3 w-3 mr-1" />
-                          {estadoName}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-bold text-neutral-900">
-                          {orden.exitDate}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex items-center justify-end space-x-2">
-                          <Button variant="ghost" size="sm" className="hover:bg-accent-50 hover:text-accent-600" onClick={() => handleEdit(orden)}>
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm" onClick={() => handleDelete(orden.id)} className="hover:bg-primary-50 hover:text-primary-600">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
+             <tbody className="bg-zinc-900 divide-y divide-zinc-800">
+  {filteredOrdenes.map((orden) => {
+    const estadoName = getStateName(orden.stateId);
+    const EstadoIcon = AlertCircle;
+    return (
+      <tr key={orden.id} className="hover:bg-zinc-800 transition-colors duration-150">
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div className="flex flex-col">
+            <div className="text-sm font-bold text-zinc-100">{orden.id}</div>
+            <div className="text-sm text-zinc-400">
+              {orden.entryDate}
+            </div>
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div>
+            <div className="text-sm font-semibold text-zinc-100">
+              {getClientFromOrder(orden)?.name || 'N/A'} {getClientFromOrder(orden)?.lastName || ''}
+            </div>
+            <div className="text-sm text-zinc-400">
+              {getVehicleFromOrder(orden)?.brand || ''} • {getVehicleFromOrder(orden)?.vin || ''}
+            </div>
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div className="text-sm text-zinc-100">
+            {getUserFromOrder(orden)?.name || 'N/A'} {getUserFromOrder(orden)?.lastName || ''}
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-700 text-zinc-100">
+            <EstadoIcon className="h-3 w-3 mr-1 text-blue-400" />
+            {estadoName}
+          </span>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div className="text-sm font-bold text-zinc-100">
+            {orden.exitDate}
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <div className="flex items-center justify-end space-x-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hover:bg-zinc-700 text-zinc-300 hover:text-white"
+              onClick={() => handleEdit(orden)}
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDelete(orden.id)}
+              className="hover:bg-red-600/20 text-red-400 hover:text-red-500"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        </td>
+      </tr>
+    );
+  })}
+</tbody>
+
             </table>
           </div>
         </CardContent>
@@ -442,96 +455,153 @@ export function OrdenesServicio() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-4xl shadow-strong border border-neutral-200 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold text-neutral-900 mb-6">
-              {selectedOrden ? 'Editar Orden de Servicio' : 'Nueva Orden de Servicio'}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <Select name="vehiclesId" label="Vehículo" value={formValues.vehiclesId || ''} onChange={e => {
-                  const value = e.target.value;
-                  setFormValues(prev => ({
-                    ...prev,
-                    vehiclesId: value ? Number(value) : undefined
-                  }));
-                }} className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray rounded-lg">
-                  <option value="" >Seleccionar vehículo</option>
-                  {vehiculos.map(vehiculo => (
-                    <option key={vehiculo.id} value={vehiculo.id}>
-                      {vehiculo.brand} {vehiculo.model}
-                    </option>
-                  ))}
-                </Select>
-                <Select label="Mecánico" name="userId" value={formValues.userId || ''} onChange={e => setFormValues(prev => ({
-                      ...prev,
-                      userId: Number(e.target.value)
-                    }))}
-                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
-                  <option value="">Asignar mecánico</option>
-                  {usuarios.map(mecanico => (
-                    <option key={mecanico.id} value={mecanico.id}>
-                      {mecanico.name} {mecanico.lastName}
-                    </option>
-                  ))}
-                </Select>
-                <Select label="Estado" name="stateId" value={formValues.stateId || ''} onChange={e => setFormValues(prev => ({
-                      ...prev,
-                      stateId: Number(e.target.value)
-                    }))}
-                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
-                  <option value="">Asignar estado</option>
-                  {estados.map(s => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}
-                    </option>
-                  ))}
-                </Select>
-                <Select label="Tipo de Servicio" name="typeServiceId" value={formValues.typeServiceId || ''} onChange={e => setFormValues(prev => ({
-                      ...prev,
-                      typeServiceId: Number(e.target.value)
-                    }))}
-                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
-                  <option value="">Asignar tipo de servicio</option>
-                  {servicios.map(s => (
-                    <option key={s.id} value={s.id}>
-                      {s.name}
-                    </option>
-                  ))}
-                </Select>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="isAuthorized"
-                    checked={!!formValues.isAuthorized}
-                    onChange={e => setFormValues(prev => ({
-                      ...prev,
-                      isAuthorized: e.target.checked
-                    }))}
-                    className="form-checkbox h-5 w-5 text-primary-600"
-                  />
-                  <label htmlFor="isAuthorized" className="text-sm font-semibold text-neutral-700">
-                    Autorizado por el cliente
-                  </label>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <Input label="Fecha de Entrada" type="date" name="entryDate" value={formValues.entryDate || ''} onChange={handleInputChange}/>
-                <Input label="Fecha de Salida" type="date" name="exitDate" value={formValues.exitDate || ''} onChange={handleInputChange}/>
-                <Input label="Mensaje Cliente" name="clientMessage" value={formValues.clientMessage || ''} onChange={handleInputChange}/>
-              </div>
-            </div>
-            <div className="flex justify-end space-x-3 mt-8 from-blue-600 to-purple-500 hover:from-purple-200 hover:to-blue-700">
-              <Button variant="outline" onClick={() => setShowModal(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={handleSubmit}>
-                {selectedOrden ? 'Actualizar' : 'Crear'}
-              </Button>
-            </div>
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-white rounded-2xl p-8 w-full max-w-4xl shadow-2xl border border-gray-200 max-h-[90vh] overflow-y-auto">
+      
+      <h2 className="text-xl font-bold text-gray-900 mb-6">
+        {selectedOrden ? 'Editar Orden de Servicio' : 'Nueva Orden de Servicio'}
+      </h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-4">
+          <Select
+            name="vehiclesId"
+            label="Vehículo"
+            value={formValues.vehiclesId || ''}
+            onChange={e => {
+              const value = e.target.value;
+              setFormValues(prev => ({
+                ...prev,
+                vehiclesId: value ? Number(value) : undefined
+              }));
+            }}
+            className="w-full bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          >
+            <option value="">Seleccionar vehículo</option>
+            {vehiculos.map(vehiculo => (
+              <option key={vehiculo.id} value={vehiculo.id}>
+                {vehiculo.brand} {vehiculo.model}
+              </option>
+            ))}
+          </Select>
+
+          <Select
+            label="Mecánico"
+            name="userId"
+            value={formValues.userId || ''}
+            onChange={e => setFormValues(prev => ({
+              ...prev,
+              userId: Number(e.target.value)
+            }))}
+            className="w-full bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          >
+            <option value="">Asignar mecánico</option>
+            {usuarios.map(mecanico => (
+              <option key={mecanico.id} value={mecanico.id}>
+                {mecanico.name} {mecanico.lastName}
+              </option>
+            ))}
+          </Select>
+
+          <Select
+            label="Estado"
+            name="stateId"
+            value={formValues.stateId || ''}
+            onChange={e => setFormValues(prev => ({
+              ...prev,
+              stateId: Number(e.target.value)
+            }))}
+            className="w-full bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          >
+            <option value="">Asignar estado</option>
+            {estados.map(s => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </Select>
+
+          <Select
+            label="Tipo de Servicio"
+            name="typeServiceId"
+            value={formValues.typeServiceId || ''}
+            onChange={e => setFormValues(prev => ({
+              ...prev,
+              typeServiceId: Number(e.target.value)
+            }))}
+            className="w-full bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          >
+            <option value="">Asignar tipo de servicio</option>
+            {servicios.map(s => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </Select>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="isAuthorized"
+              checked={!!formValues.isAuthorized}
+              onChange={e => setFormValues(prev => ({
+                ...prev,
+                isAuthorized: e.target.checked
+              }))}
+              className="form-checkbox h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500"
+            />
+            <label htmlFor="isAuthorized" className="text-sm font-medium text-gray-700">
+              Autorizado por el cliente
+            </label>
           </div>
         </div>
-      )}
+
+        <div className="space-y-4">
+          <Input
+            label="Fecha de Entrada"
+            type="date"
+            name="entryDate"
+            value={formValues.entryDate || ''}
+            onChange={handleInputChange}
+            className="w-full bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          />
+          <Input
+            label="Fecha de Salida"
+            type="date"
+            name="exitDate"
+            value={formValues.exitDate || ''}
+            onChange={handleInputChange}
+            className="w-full bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          />
+          <Input
+            label="Mensaje Cliente"
+            name="clientMessage"
+            value={formValues.clientMessage || ''}
+            onChange={handleInputChange}
+            className="w-full bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-end space-x-3 mt-8 pt-6 border-t border-gray-200">
+        <Button
+          variant="outline"
+          onClick={() => setShowModal(false)}
+          className="px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+        >
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg shadow-lg transition-transform transform hover:scale-105"
+        >
+          {selectedOrden ? 'Actualizar' : 'Crear'}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

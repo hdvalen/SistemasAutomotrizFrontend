@@ -9,7 +9,7 @@ export default function SketchfabEmbed() {
           src="https://sketchfab.com/models/1bb367ebaee14829a24e9b5444c15087/embed?autospin=1&autostart=1&preload=1&transparent=1"
           allow="autoplay; fullscreen; xr-spatial-tracking"
           allowFullScreen
-          style={{ width: "500px", height: "150px" }}
+          style={{ width: "600px", height: "150px" }}
         ></iframe>
        
           

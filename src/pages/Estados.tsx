@@ -191,68 +191,92 @@ export function Estados() {
                                 </th>
                             </tr>
                         </thead>
-                            <tbody className="bg-white divide-y divide-neutral-200">
-                                {filteredEstados.map((estado) => (
-                                    <tr key={estado.id} className="hover:bg-gradient-to-r hover:from-neutral-50 hover:to-neutral-100 transition-all duration-200">
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="flex items-center">
-                                        <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center shadow-medium">
-                                            <span className="text-sm font-bold text-white">
-                                            {estado.name.charAt(0)}
-                                            </span>
-                                        </div>
-                                        <div className="ml-4">
-                                            <div className="text-sm font-bold text-neutral-900">
-                                            ID
-                                            </div>
-                                            <div className="text-sm text-neutral-500">{estado.id}</div>
-                                        </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-neutral-900">{estado.name}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div className="flex items-center justify-end space-x-2">
-                                        <Button variant="ghost" size="sm" className="hover:bg-accent-50 hover:text-accent-600">
-                                            <Eye className="h-4 w-4" />
-                                        </Button>
-                                        <Button variant="ghost" size="sm" onClick={() => handleEdit(estado)} className="hover:bg-primary-50 hover:text-primary-600">
-                                            <Edit className="h-4 w-4" />
-                                        </Button>
-                                        <Button variant="ghost" size="sm" className="hover:bg-danger-50 hover:text-danger-600" onClick={() => handleDelete(estado.id)}>
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                        </div>
-                                    </td>
-                                    </tr>
-                                ))}
-                                </tbody>
+                            <tbody className="bg-zinc-900 divide-y divide-zinc-800">
+  {filteredEstados.map((estado) => (
+    <tr
+      key={estado.id}
+      className="hover:bg-zinc-800 transition-all duration-200"
+    >
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center">
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center shadow-md">
+            <span className="text-sm font-bold text-white">
+              {estado.name.charAt(0)}
+            </span>
+          </div>
+          <div className="ml-4">
+            <div className="text-sm font-bold text-zinc-300">ID</div>
+            <div className="text-sm text-zinc-400">{estado.id}</div>
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm text-zinc-100">{estado.name}</div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+        <div className="flex items-center justify-end space-x-2">
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleEdit(estado)}
+            className="hover:bg-zinc-700 text-zinc-300 hover:text-white"
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleDelete(estado.id)}
+            className="hover:bg-red-600/20 text-red-400 hover:text-red-500"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
                         </table>
                     </div>
                 </CardContent>
             </Card>
 
-            {showModal && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-strong border border-neutral-200">
-                    <h2 className="text-xl font-bold text-neutral-900 mb-6">
-                        {selectedState ? 'Editar Diagnóstico' : 'Nuevo Diagnóstico'}
-                    </h2>
-                    <div className="space-y-4">
-                        <Input label="Descripción" name="name" value={formValues.name || ''} onChange={handleInputChange}/>
-                    </div>
-                    <div className="flex justify-end space-x-3 mt-8">
-                        <Button variant="outline" onClick={() => setShowModal(false)}>
-                        Cancelar
-                        </Button>
-                        <Button onClick={handleSubmit}>
-                        {selectedState ? 'Actualizar' : 'Crear'}
-                        </Button>
-                    </div>
-                    </div>
-                </div>
-                )}
+           {showModal && (
+  <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-gray-50 rounded-2xl p-8 w-full max-w-md shadow-xl border border-gray-200">
+      <h2 className="text-xl font-bold text-gray-900 mb-6">
+        {selectedState ? 'Editar Estado' : 'Nuevo Estado'}
+      </h2>
+      <div className="space-y-4">
+        <Input
+          label="Descripción"
+          name="name"
+          value={formValues.name || ''}
+          onChange={handleInputChange}
+          className="bg-white border-gray-300 text-gray-900"
+        />
+      </div>
+      <div className="flex justify-end space-x-3 mt-8">
+        <Button
+          variant="outline"
+          onClick={() => setShowModal(false)}
+          className="border-gray-300 text-gray-700 hover:bg-gray-100"
+        >
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          className="bg-blue-600 hover:bg-blue-700 text-white"
+        >
+          {selectedState ? 'Actualizar' : 'Crear'}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
         </div>
     );
 }
