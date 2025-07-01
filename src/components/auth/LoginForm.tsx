@@ -5,6 +5,8 @@ import { Input } from '../ui/Input';
 import { Wrench, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import { SketchfabEmbed2 } from '../ui/SketchEmbed';
+
 export function LoginForm() {
   const { login, isLoading } = useAuth();
   const [username, setUsername] = useState('');

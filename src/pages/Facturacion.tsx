@@ -12,6 +12,8 @@ import { getState } from '../Apis/StateApi';
 import { getClient } from '../Apis/ClientApis';
 import { getOrderDetails } from '../Apis/OrderDetailsApis';
 import { getVehicle } from '../Apis/vehiclesApis';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const estadoConfig = {
   pendiente: { icon: AlertCircle, color: 'text-warning-600', bg: 'bg-warning-100', label: 'Pendiente' },
@@ -33,6 +35,8 @@ export function Facturacion() {
   const [vehiculos, setVehiculos] = useState<Vehicle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [facturaGenerada, setFacturaGenerada] = useState<Invoice | null>(null);
+  // Ref para el contenido del modal de factura
+  const facturaModalRef = React.useRef<HTMLDivElement>(null);
 
   // Cargar todos los datos al inicializar el componente
   useEffect(() => {
@@ -363,6 +367,23 @@ export function Facturacion() {
   // Cambiar la fuente de datos de la tabla: solo órdenes sin factura
   const ordenesPendientesFacturar = getServiceOrdersWithoutInvoice();
 
+  // Función para descargar el PDF del modal de factura
+  const handleDownloadPDF = async () => {
+    const input = facturaModalRef.current;
+    if (!input) return;
+    const canvas = await html2canvas(input, { scale: 2 });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    // Ajustar la imagen al ancho de la página
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pageWidth;
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('factura.pdf');
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -434,58 +455,67 @@ export function Facturacion() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-neutral-200">
-                {ordenesPendientesFacturar
-                  .filter(so => {
-                    const estado = estados.find(e => e.id === so.stateId)?.name.toLowerCase() || '';
-                    const vehicle = getVehicleFromServiceOrder(so);
-                    const client = vehicle ? getClientFromVehicle(vehicle) : undefined;
-                    const search = searchTerm.toLowerCase();
-                    return (
-                      (!filterEstado || estado === filterEstado) &&
-                      (
-                        so.id.toString().includes(search) ||
-                        (vehicle && `${vehicle.brand} ${vehicle.model}`.toLowerCase().includes(search)) ||
-                        (client && `${client.name} ${client.lastName}`.toLowerCase().includes(search))
-                      )
-                    );
-                  })
-                  .map((so) => {
-                    const vehicle = getVehicleFromServiceOrder(so);
-                    const client = vehicle ? getClientFromVehicle(vehicle) : undefined;
-                    const estado = estados.find(e => e.id === so.stateId)?.name || 'N/A';
-                    return (
-                      <tr key={so.id} className="hover:bg-gradient-to-r hover:from-neutral-50 hover:to-neutral-100 transition-all duration-200">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-bold text-neutral-900">#{so.id}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-semibold text-neutral-900">
-                            {client ? `${client.name} ${client.lastName}` : 'Sin datos'}
-                          </div>
-                          <div className="text-sm text-neutral-500">
-                            {vehicle ? `${vehicle.brand} ${vehicle.model}` : 'Sin datos'}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-neutral-200 text-neutral-700">
-                            {estado}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-neutral-900">
-                            {new Date(so.entryDate).toLocaleDateString('es-ES')}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <Button size="sm" onClick={() => generateInvoiceFromServiceOrder(so)}>
-                            <Plus className="h-4 w-4 mr-1" /> Generar Factura
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
+              <tbody className="bg-zinc-900 divide-y divide-zinc-800">
+  {ordenesPendientesFacturar
+    .filter(so => {
+      const estado = estados.find(e => e.id === so.stateId)?.name.toLowerCase() || '';
+      const vehicle = getVehicleFromServiceOrder(so);
+      const client = vehicle ? getClientFromVehicle(vehicle) : undefined;
+      const search = searchTerm.toLowerCase();
+      return (
+        (!filterEstado || estado === filterEstado) &&
+        (
+          so.id.toString().includes(search) ||
+          (vehicle && `${vehicle.brand} ${vehicle.model}`.toLowerCase().includes(search)) ||
+          (client && `${client.name} ${client.lastName}`.toLowerCase().includes(search))
+        )
+      );
+    })
+    .map((so) => {
+      const vehicle = getVehicleFromServiceOrder(so);
+      const client = vehicle ? getClientFromVehicle(vehicle) : undefined;
+      const estado = estados.find(e => e.id === so.stateId)?.name || 'N/A';
+      return (
+        <tr
+          key={so.id}
+          className="hover:bg-zinc-800 transition-all duration-200"
+        >
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm font-bold text-zinc-100">#{so.id}</div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm font-semibold text-zinc-100">
+              {client ? `${client.name} ${client.lastName}` : 'Sin datos'}
+            </div>
+            <div className="text-sm text-zinc-400">
+              {vehicle ? `${vehicle.brand} ${vehicle.model}` : 'Sin datos'}
+            </div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-700 text-zinc-200">
+              {estado}
+            </span>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <div className="text-sm text-zinc-300">
+              {new Date(so.entryDate).toLocaleDateString('es-ES')}
+            </div>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            <Button
+              size="sm"
+              onClick={() => generateInvoiceFromServiceOrder(so)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center space-x-1"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Generar Factura</span>
+            </Button>
+          </td>
+        </tr>
+      );
+    })}
+</tbody>
+
             </table>
           </div>
           {ordenesPendientesFacturar.length === 0 && (
@@ -499,7 +529,7 @@ export function Facturacion() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-4xl shadow-strong border border-neutral-200 max-h-[90vh] overflow-y-auto">
+          <div ref={facturaModalRef} className="bg-white rounded-2xl p-8 w-full max-w-4xl shadow-strong border border-neutral-200 max-h-[90vh] overflow-y-auto">
             
             {selectedFactura ? (
               // Vista de detalle de factura
@@ -686,7 +716,7 @@ export function Facturacion() {
                 {selectedFactura ? 'Cerrar' : 'Cancelar'}
               </Button>
               {selectedFactura ? (
-                <Button>
+                <Button onClick={handleDownloadPDF}>
                   <Download className="h-4 w-4 mr-1" />
                   Descargar PDF
                 </Button>
@@ -706,28 +736,28 @@ export function Facturacion() {
       {/* Modal de factura generada */}
       {facturaGenerada && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-lg shadow-strong border border-neutral-200 max-h-[90vh] overflow-y-auto">
+          <div ref={facturaModalRef} className="bg-white rounded-2xl p-8 w-full max-w-lg shadow-strong border border-neutral-200 max-h-[90vh] overflow-y-auto">
             <div className="space-y-6">
               <div className="border-b pb-4">
-                <h2 className="text-2xl font-bold text-neutral-900">Factura Generada</h2>
-                <p className="text-neutral-600">Información básica de la factura</p>
+                <h2 className="text-2xl font-bold text-zinc-800">Factura Generada</h2>
+                <p className="text-zinc-500">Información básica de la factura</p>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-sm text-neutral-600">ID:</span>
-                  <span className="text-sm font-semibold">{facturaGenerada.id}</span>
+                  <span className="text-sm text-zinc-700">ID:</span>
+                  <span className="text-sm font-semibold text-zinc-800">{facturaGenerada.id}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-neutral-600">Código:</span>
-                  <span className="text-sm font-semibold">{facturaGenerada.code || 'N/A'}</span>
+                  <span className="text-sm text-zinc-700">Código:</span>
+                  <span className="text-sm font-semibold text-zinc-800">{facturaGenerada.code || 'N/A'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-neutral-600">Fecha:</span>
-                  <span className="text-sm font-semibold">{new Date(facturaGenerada.date).toLocaleDateString('es-ES')}</span>
+                  <span className="text-sm text-zinc-700">Fecha:</span>
+                  <span className="text-sm font-semibold text-zinc-800">{new Date(facturaGenerada.date).toLocaleDateString('es-ES')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-neutral-600">Total:</span>
-                  <span className="text-sm font-semibold">${facturaGenerada.totalPrice.toLocaleString()}</span>
+                  <span className="text-sm text-zinc-700">Total:</span>
+                  <span className="text-sm font-semibold text-zinc-800">${facturaGenerada.totalPrice.toLocaleString()}</span>
                 </div>
                 {/* Cliente y vehículo */}
                 {(() => {
@@ -752,10 +782,7 @@ export function Facturacion() {
                 <Button variant="outline" onClick={cerrarModalFactura}>
                   Salir
                 </Button>
-                <Button onClick={() => {
-                  // Aquí iría la lógica real de descarga de PDF
-                  Swal.fire('Próximamente', 'Funcionalidad de descarga de PDF en desarrollo', 'info');
-                }}>
+                <Button onClick={handleDownloadPDF} className="bg-blue-600 hover:bg-blue-700 text-white">
                   <Download className="h-4 w-4 mr-1" />
                   Descargar PDF
                 </Button>

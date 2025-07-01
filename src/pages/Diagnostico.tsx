@@ -169,141 +169,184 @@ export function Diagnostico() {
         }
     }
     return (
-        <div className="p-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-neutral-900 to-neutral-700 bg-clip-text text-transparent">
+        <div className="min-h-screen bg-zinc-900 py-8 px-4 sm:px-6 lg:px-8 text-zinc-100">
+            <div className="max-w-7xl mx-auto space-y-8">
+                <div className='flex items-center justify-between bg-zinc-800 rounded-xl p-6 shadow-lg border border-zinc-700'>
+                    <div>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
                     Gestión de Diagnósticos
                     </h1>
-                    <p className="text-neutral-600 mt-1">Administra la información de los diagnósticos</p>
+                    <p className="text-zinc-400 mt-2 text-lg">Administra la información de los diagnósticos</p>
                 </div>
-                <Button onClick={handleCreate} className="shadow-medium">
-                    <Plus className="h-4 w-4 mr-2" />
+                
+                <Button onClick={handleCreate} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105">
+                    <Plus className="h-5 w-5 mr-2" />
                     Nuevo Diagnóstico
                 </Button>
                 </div>
-
-            <Card>
-                <CardHeader>
-                    <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center">
-                        <div className="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
+                </div>
+            {/*Main Table Card */}
+            <Card className="bg-zinc-900 border border-zinc-700 shadow-xl mt-8">
+                <CardHeader className="bg-gradient-to-r  to-indigo-900 border-b border-zinc-700">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <CardTitle className="flex items-center text-xl font-bold text-white">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
                         Lista de Diagnósticos
                     </CardTitle>
-                    <div className="relative max-w-md">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-400" />
+                    <div className="relative ">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-zinc-400" />
                         <Input
                         placeholder="Buscar diagnósticos..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10"
+                        className="pl-10 pr-4 py-2 bg-zinc-800 text-white border-zinc-600 focus:border-blue-500 focus:ring-blue-500 rounded-lg w-full sm:w-64"
                         />
                     </div>
                     </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0">
                     <div>
-                        <table className="min-w-full divide-y divide-neutral-200">
-                            <thead className="bg-gradient-to-r from-neutral-50 to-neutral-100">
+                        <table className="min-w-full divide-y divide-zinc-500">
+                            <thead className="bg-zinc-800">
                             <tr>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                                     ID
                                 </th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                                     DESCRIPCION
                                 </th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                                     USUARIO
                                 </th>
-                                <th className="px-6 py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                                     FECHA
                                 </th>
-                                <th className="px-6 py-4 text-right text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                                <th className="px-6 py-4 text-right text-xs font-bold text-zinc-400 uppercase tracking-wider">
                                     Acciones
                                 </th>
                             </tr>
                         </thead>
-                            <tbody className="bg-white divide-y divide-neutral-200">
-                                {filteredDiagnostico.map((diagnostico) => (
-                                    <tr key={diagnostico.id} className="hover:bg-gradient-to-r hover:from-neutral-50 hover:to-neutral-100 transition-all duration-200">
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="flex items-center">
-                                        <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center shadow-medium">
-                                            <span className="text-sm font-bold text-white">
-                                            {diagnostico.description.charAt(0)}
-                                            </span>
-                                        </div>
-                                        <div className="ml-4">
-                                            <div className="text-sm font-bold text-neutral-900">
-                                            ID
-                                            </div>
-                                            <div className="text-sm text-neutral-500">{diagnostico.id}</div>
-                                        </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-neutral-900">{diagnostico.description}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-neutral-900">{getUserFromDiagnostico(diagnostico)?.name || 'N/A'} {getUserFromDiagnostico(diagnostico)?.lastName || ''}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
-                                        {diagnostico.date}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div className="flex items-center justify-end space-x-2">
-                                        <Button variant="ghost" size="sm" className="hover:bg-accent-50 hover:text-accent-600">
-                                            <Eye className="h-4 w-4" />
-                                        </Button>
-                                        <Button variant="ghost" size="sm" onClick={() => handleEdit(diagnostico)} className="hover:bg-primary-50 hover:text-primary-600">
-                                            <Edit className="h-4 w-4" />
-                                        </Button>
-                                        <Button variant="ghost" size="sm" className="hover:bg-danger-50 hover:text-danger-600" onClick={() => handleDelete(diagnostico.id)}>
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                        </div>
-                                    </td>
-                                    </tr>
-                                ))}
-                                </tbody>
+                            <tbody className="bg-neutral-900 divide-y divide-neutral-700">
+  {filteredDiagnostico.map((diagnostico) => (
+    <tr
+      key={diagnostico.id}
+      className="hover:bg-gradient-to-r hover:from-neutral-800 hover:to-neutral-700 transition-all duration-200"
+    >
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center">
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center shadow-md">
+            <span className="text-sm font-bold text-white">
+              {diagnostico.description.charAt(0)}
+            </span>
+          </div>
+          <div className="ml-4">
+            <div className="text-sm font-bold text-white">ID</div>
+            <div className="text-sm text-neutral-400">{diagnostico.id}</div>
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm text-white">{diagnostico.description}</div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm text-white">
+          {getUserFromDiagnostico(diagnostico)?.name || 'N/A'}{' '}
+          {getUserFromDiagnostico(diagnostico)?.lastName || ''}
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-400">
+        {diagnostico.date}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+        <div className="flex items-center justify-end space-x-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleEdit(diagnostico)}
+            className="hover:bg-zinc-700 text-zinc-300 hover:text-white"
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleDelete(diagnostico.id)}
+            className="hover:bg-red-600/20 text-red-400 hover:text-red-500"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
                         </table>
                     </div>
                 </CardContent>
             </Card>
 
             {showModal && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-strong border border-neutral-200">
-                    <h2 className="text-xl font-bold text-neutral-900 mb-6">
-                        {selectedDiagnostico ? 'Editar Diagnóstico' : 'Nuevo Diagnóstico'}
-                    </h2>
-                    <div className="space-y-4">
-                        <Input label="Descripción" name="description" value={formValues.description || ''} onChange={handleInputChange}/>
-                        <Input label="Fecha a Agendar" type="date" name="date" value={formValues.date || ''} onChange={handleInputChange}/>
-                        <Select label="Mecánico" name="userId" value={formValues.userId || ''} onChange={e => setFormValues(prev => ({
-                                ...prev,
-                                userId: Number(e.target.value)
-                            }))}
-                            className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
-                            <option value="">Asignar mecánico</option>
-                            {usuarios.map(mecanico => (
-                            <option key={mecanico.id} value={mecanico.id}>
-                                {mecanico.name} {mecanico.lastName}
-                            </option>
-                            ))}
-                        </Select>
-                    </div>
-                    <div className="flex justify-end space-x-3 mt-8">
-                        <Button variant="outline" onClick={() => setShowModal(false)}>
-                        Cancelar
-                        </Button>
-                        <Button onClick={handleSubmit}>
-                        {selectedDiagnostico ? 'Actualizar' : 'Crear'}
-                        </Button>
-                    </div>
-                    </div>
-                </div>
-                )}
+  <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl border border-gray-300">
+      <h2 className="text-xl font-bold text-gray-900 mb-6">
+        {selectedDiagnostico ? 'Editar Diagnóstico' : 'Nuevo Diagnóstico'}
+      </h2>
+      <div className="space-y-4">
+        <Input
+          label="Descripción"
+          name="description"
+          value={formValues.description || ''}
+          onChange={handleInputChange}
+          className="bg-white text-black border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        />
+        <Input
+          label="Fecha a Agendar"
+          type="date"
+          name="date"
+          value={formValues.date || ''}
+          onChange={handleInputChange}
+          className="bg-white text-black border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        />
+        <Select
+          label="Mecánico"
+          name="userId"
+          value={formValues.userId || ''}
+          onChange={e =>
+            setFormValues(prev => ({
+              ...prev,
+              userId: Number(e.target.value)
+            }))
+          }
+          className="w-full bg-white text-black border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg"
+        >
+          <option value="">Asignar mecánico</option>
+          {usuarios.map(mecanico => (
+            <option key={mecanico.id} value={mecanico.id}>
+              {mecanico.name} {mecanico.lastName}
+            </option>
+          ))}
+        </Select>
+      </div>
+      <div className="flex justify-end space-x-3 mt-8">
+        <Button
+          variant="outline"
+          onClick={() => setShowModal(false)}
+          className="text-gray-700 border-gray-300 hover:bg-gray-100"
+        >
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow rounded-lg"
+        >
+          {selectedDiagnostico ? 'Actualizar' : 'Crear'}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
         </div>
     );
 }

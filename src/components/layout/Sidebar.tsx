@@ -10,37 +10,41 @@ import {
   Settings, 
   LogOut,
   Wrench,
-  Calendar
+  Calendar,
+  BadgeCheck,
+  FileCheck2,
+  ListChecks,
+  BrainCircuit
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { clsx } from 'clsx';
 
 const navigation = {
   Administrator: [
-    { name: 'Dashboard', href: '/dashboard', icon: Home },
-    { name: 'Clientes', href: '/clientes', icon: Users },
-    { name: 'Vehículos', href: '/vehiculos', icon: Car },
-    { name: 'Órdenes de Servicio', href: '/ordenes', icon: ClipboardList },
-    { name: 'Detalles Orden', href: '/ordenDetalles', icon: ClipboardList },
-    { name: 'Inventario', href: '/inventario', icon: Package },
-    { name: 'Facturación', href: '/facturacion', icon: FileText },
-    { name: 'Usuarios', href: '/usuarios', icon: Users },
-    { name: 'Historial', href: '/historial', icon: Settings },
-    { name: 'Estados', href: '/estados', icon: Users },
-    { name: 'Servicios', href: '/tipodeservicio', icon: Settings },
+  { name: 'Dashboard', href: '/dashboard', icon: Home }, // Panel principal
+  { name: 'Clientes', href: '/clientes', icon: Users }, // Gestión de clientes
+  { name: 'Vehículos', href: '/vehiculos', icon: Car }, // Información de vehículos
+  { name: 'Órdenes de Servicio', href: '/ordenes', icon: ListChecks }, // Lista de órdenes activas
+  { name: 'Detalles Orden', href: '/ordenDetalles', icon: FileCheck2 }, // Detalles de una orden específica
+  { name: 'Inventario', href: '/inventario', icon: Package }, // Gestión de repuestos
+  { name: 'Facturación', href: '/facturacion', icon: FileText }, // Área financiera
+  { name: 'Usuarios', href: '/usuarios', icon: Users }, // Control de usuarios
+  { name: 'Historial', href: '/historial', icon: ListChecks }, // Registro de acciones o auditorías
+  { name: 'Estados', href: '/estados', icon: BadgeCheck }, // Estados del sistema o de órdenes
+  { name: 'Servicios', href: '/tipodeservicio', icon: Wrench }, // Tipos de servicio ofrecidos
   ],
   Recepcionist: [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
     { name: 'Clientes', href: '/clientes', icon: Users },
     { name: 'Vehículos', href: '/vehiculos', icon: Car },
     { name: 'Órdenes de Servicio', href: '/ordenes', icon: ClipboardList },
-    { name: 'Diagnostico', href: '/diagnostico', icon: Calendar},
+    { name: 'Diagnostico', href: '/diagnostico', icon: BrainCircuit},
   ],
   Mechanic: [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
-    { name: 'Órdenes de Servicio', href: '/ordenes', icon: ClipboardList },
+    { name: 'Órdenes de Servicio', href: '/ordenes', icon: ListChecks },
     { name: 'Facturación', href: '/facturacion', icon: FileText },
-    { name: 'Detalles Orden', href: '/ordenDetalles', icon: ClipboardList },
+    { name: 'Detalles Orden', href: '/ordenDetalles', icon: FileCheck2 },
   ],
 };
 
