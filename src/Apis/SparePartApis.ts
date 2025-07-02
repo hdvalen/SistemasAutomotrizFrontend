@@ -1,83 +1,60 @@
 import type { SparePart } from "../types";
 
 const URL_API = "http://localhost:5070";
-const myHeaders = new Headers({
-    "Content-Type": "application/json"
-});
+
+function getHeaders() {
+    const token = localStorage.getItem('token') || '';
+    return {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    };
+  }
 
 export const getSpareParts = async (): Promise<SparePart[] | null> => {
     try {
         const response = await fetch(`${URL_API}/api/SparePart`, {
-            method: 'GET',
-            headers: myHeaders
+          method: 'GET',
+          headers: getHeaders()
         });
-
-        switch (response.status) {
-            case 200:
-                const data: SparePart[] = await response.json();
-                return data;
-            case 401:
-                console.error("No autorizado o token inválido");
-                break;
-            case 404:
-                console.error("El SparePart no existe");
-                break;
-            default:
-                console.error("Error inesperado. Contacte al administrador.");
+        if (response.ok) {
+          return await response.json();
         }
-    } catch (error) {
-        console.error("Error de red o servidor:", error);
-    }
-
-    return null; // en caso de error
-};
+        console.error(`GET /api/SparePart falló con status ${response.status}`);
+      } catch (error) {
+        console.error("Error de red o servidor en getSparePart:", error);
+      }
+      return null;
+    };
 
 export const postSparePart = async (datos: SparePart): Promise<any | undefined> => {
-    try {
-        // Remove id if present
-        const { id, ...sparePartData } = datos;
-        console.log("Datos enviados a postSparePart:", sparePartData);
+    const { id, ...SparePartData } = datos;
+  console.log("📤 postSparePart enviando:", SparePartData);
 
-        const response = await fetch(`${URL_API}/api/SparePart`, {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify(sparePartData)
-        });
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Error en la solicitud POST: ${response.status} - ${errorText}`);
-            return undefined;
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error en la solicitud POST:', error);
-    }
-}
+  const response = await fetch(`${URL_API}/api/SparePart`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(SparePartData)
+  });
 
-export const putSparePart = async (datos: SparePart, id: number | string): Promise<Response | undefined> => {
-    try {
-        return await fetch(`${URL_API}/api/SparePart/${id}`, {
-            method: "PUT",
-            headers: myHeaders,
-            body: JSON.stringify(datos)
-        });
-    } catch (error) {
-        console.error('Error en la solicitud PUT:', error);
-    }
-}
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`POST /api/SparePart ERROR ${response.status}:`, errorText);
+    throw new Error(errorText || `Error ${response.status}`);
+  }
 
-export const deleteSparePart = async (id: number | string): Promise<Response | undefined> => {
-    try {
-        const response = await fetch(`${URL_API}/api/SparePart/${id}`, {
-            method: "DELETE",
-            headers: myHeaders,
-        });
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Error en la solicitud DELETE: ${response.status} - ${errorText}`);
-        }
-        return response;
-    } catch (error) {
-        console.error('Error en la solicitud DELETE:', error);
-    }
-}
+  // 3) el servidor responde con Created (201) y el objeto creado (incluyendo el nuevo id)
+  return response.json();
+};
+
+export const putSparePart = (datos:SparePart, id: number | string) =>
+  fetch(`${URL_API}/api/SparePart/${id}`, {
+    method: "PUT",
+    headers: getHeaders(),
+    body: JSON.stringify(datos)
+  });
+
+export const deleteSparePart = (id: number | string) =>
+  fetch(`${URL_API}/api/SparePart/${id}`, {
+    method: "DELETE",
+    headers: getHeaders(),
+  });
