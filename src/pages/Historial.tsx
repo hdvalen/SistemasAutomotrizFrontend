@@ -72,6 +72,9 @@ export function Historial() {
                     <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
                       Tipo de Cambio
                     </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-zinc-400 uppercase tracking-wider">
+                      Fecha Cambio
+                    </th>
                   </tr>
                 </thead>
                <tbody className="bg-zinc-900 divide-y divide-zinc-800">
@@ -94,6 +97,9 @@ export function Historial() {
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="text-sm font-semibold text-zinc-100">{audit.changeType}</div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm font-semibold text-zinc-100">{audit.date}</div>
       </td>
     </tr>
   ))}

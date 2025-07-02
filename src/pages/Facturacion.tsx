@@ -6,7 +6,7 @@ import { Input } from '../components/ui/Input';
 import { Select } from '../components/ui/Select';
 import { Plus, Search, Eye, Download, DollarSign, FileText, CreditCard, AlertCircle } from 'lucide-react';
 import type { Invoice, Client, ServiceOrder, State, OrderDetails, Vehicle } from '../types';
-import { getInvoice, generateInvoice } from '../Apis/InvoiceApis';
+import { getInvoice, generateInvoice, deleteInvoice } from '../Apis/InvoiceApis';
 import { getServiceOrder } from '../Apis/ServiceOrder';
 import { getState } from '../Apis/StateApi';
 import { getClient } from '../Apis/ClientApis';
