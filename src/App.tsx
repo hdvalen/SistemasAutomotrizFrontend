@@ -17,6 +17,8 @@ import { Diagnostico } from './pages/Diagnostico';
 import { DetallesOrden } from './pages/DetallesOrden';
 import { Estados } from './pages/Estados';
 import { TipodeServicio } from './pages/TipodeServicio';
+import { AutorizacionOrdenServicio } from './pages/AutorizacionOrderServices';
+
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
@@ -27,6 +29,7 @@ function AppRoutes() {
       <Route path="/" element={<HomePage />} />
 
   <Route path="/login" element={<LoginForm />} />
+ 
 
   <Route
     path="/dashboard"
@@ -46,7 +49,6 @@ function AppRoutes() {
         <Layout>
           <HomePage />
         </Layout>
-
     }
   />
 
@@ -152,6 +154,12 @@ function AppRoutes() {
                 <TipodeServicio />
               </Layout>
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/autorizacion"
+          element={
+                <AutorizacionOrdenServicio />
           }
         />
           </>

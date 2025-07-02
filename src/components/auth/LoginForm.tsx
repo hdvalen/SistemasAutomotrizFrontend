@@ -6,6 +6,7 @@ import { Wrench, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { SketchfabEmbed2 } from '../ui/SketchEmbed';
+import { AutorizacionOrdenServicio } from '../../pages/AutorizacionOrderServices';
 
 export function LoginForm() {
   const { login, isLoading } = useAuth();
@@ -14,6 +15,18 @@ export function LoginForm() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const handleOpen = async () => {
+    setError('');
+
+    try {
+      setTimeout(() => {
+        navigate('/autorizacion');
+      }, 100);
+
+    } catch {
+
+    }
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -84,6 +97,15 @@ export function LoginForm() {
               size="lg"
             >
               Iniciar Sesión
+            </Button>
+
+            <Button
+              type="submit"
+              onClick={handleOpen}
+              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg shadow-md transition duration-300"
+              size="lg"
+            >
+              Ordenes de Servicio
             </Button>
           </div>
         </form>
