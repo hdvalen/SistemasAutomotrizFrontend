@@ -10,7 +10,7 @@ function getHeaders() {
     };
   }
 
-export const getStates = async (): Promise<State[] | null> => {
+export const getState = async (): Promise<State[] | null> => {
     try {
         const response = await fetch(`${URL_API}/api/State`, {
           method: 'GET',
