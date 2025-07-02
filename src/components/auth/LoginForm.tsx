@@ -32,8 +32,10 @@ export function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 via-zinc-800 to-black py-12 px-4">
+    <div className="min-h-screen flex bg-black">
+    <div className="w-full md:w-1/2 flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full space-y-8">
+         {/* Logo y título */}
         <div className="text-center">
           <div className="flex justify-center mb-4">
             <div className="bg-gradient-to-r from-indigo-700 to-purple-700 p-4 rounded-full shadow-lg">
@@ -107,6 +109,12 @@ export function LoginForm() {
           </div>
         </div>
       </div>
+    </div>
+     {/* Lado derecho: Contenido adicional */}
+  <div className="hidden md:flex w-1/2 items-center justify-center p-12">
+    {/* Aquí puedes meter una imagen, slogan, animación, o lo que desees */}
+    <SketchfabEmbed2 />
+  </div>
     </div>
   );
 }

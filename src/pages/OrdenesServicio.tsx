@@ -479,8 +479,8 @@ export function OrdenesServicio() {
           >
             <option value="">Seleccionar vehículo</option>
             {vehiculos.map(vehiculo => (
-              <option key={vehiculo.id} value={vehiculo.id}>
-                {vehiculo.brand} {vehiculo.model}
+              <option key={vehiculo.id} value={vehiculo.id }>
+                {vehiculo.brand} {vehiculo.model} - {clientes.find(c => c.id === vehiculo.clientId)?.name || ''} {clientes.find(c => c.id === vehiculo.clientId)?.lastName || ''}
               </option>
             ))}
           </Select>

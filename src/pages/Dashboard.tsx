@@ -19,6 +19,7 @@ import { getVehicle } from '../Apis/vehiclesApis';
 import { getState } from '../Apis/StateApi';
 import { getDiagnostic } from '../Apis/DiagnosticApis';
 import { getSpareParts } from '../Apis/SparePartApis';
+import { toast } from 'react-toastify';
 
 
 interface StatCardProps {
@@ -52,9 +53,11 @@ function StatCard({ title, value, icon: Icon, gradient}: StatCardProps) {
 }
 export function Dashboard() {
   const { user } = useAuth();
-  alert("Entrando al dashboard...");  
-  console.log("📦 Dashboard montado");       // ✅ Aparece al entrar al componente
-  console.log("🧑 Usuario desde Auth:", user); // ✅ Revisa qué trae
+ useEffect(() => {
+    toast.success('Entrando al dashboard...');
+    console.log("📦 Dashboard montado");
+    console.log("🧑 Usuario desde Auth:", user);
+  }, []);
 
   if (!user?.rol) {
     return <div className="text-white p-8">Cargando datos del usuario...</div>;
@@ -351,3 +354,7 @@ export function Dashboard() {
     </div>
   );
 }
+function setCargando(arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
+
