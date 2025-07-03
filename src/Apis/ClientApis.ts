@@ -28,26 +28,36 @@ export const getClient = async (): Promise<Client[] | null> => {
   return null;
 };
 
-export const postClient = async (datos: Client): Promise<any> => {
-  // 2) quitamos el id antes de enviar
-  const { id, ...clientData } = datos;
-  console.log("📤 postClient enviando:", clientData);
+    export const postClient = async (datos: Client): Promise<any> => {
+    const { id, ...clientData } = datos;
 
-  const response = await fetch(`${URL_API}/api/Client`, {
-    method: "POST",
-    headers: getHeaders(),
-    body: JSON.stringify(clientData)
-  });
+    // Validar que al menos haya un número de teléfono
+    if (!clientData.telephoneNumbers || clientData.telephoneNumbers.length === 0) {
+        throw new Error("Debe incluir al menos un número de teléfono.");
+    }
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error(`POST /api/Client ERROR ${response.status}:`, errorText);
-    throw new Error(errorText || `Error ${response.status}`);
-  }
+    // Elimina posibles campos innecesarios como clientId
+    clientData.telephoneNumbers = clientData.telephoneNumbers.map(t => ({
+        number: t.number // solo enviamos el número
+    }));
 
-  // 3) el servidor responde con Created (201) y el objeto creado (incluyendo el nuevo id)
-  return response.json();
-};
+    console.log("📤 postClient enviando:", clientData);
+
+    const response = await fetch(`${URL_API}/api/Client`, {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify(clientData)
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`POST /api/Client ERROR ${response.status}:`, errorText);
+        throw new Error(errorText || `Error ${response.status}`);
+    }
+
+    return response.json();
+    };
+
 
 export const putClient = (datos: Client, id: number | string) =>
   fetch(`${URL_API}/api/Client/${id}`, {
