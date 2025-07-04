@@ -28,35 +28,37 @@ export const getClient = async (): Promise<Client[] | null> => {
   return null;
 };
 
-    export const postClient = async (datos: Client): Promise<any> => {
-    const { id, ...clientData } = datos;
+export const postClient = async (datos: Client): Promise<any> => {
+  const { id, ...clientData } = datos;
 
-    // Validar que al menos haya un número de teléfono
-    if (!clientData.telephoneNumbers || clientData.telephoneNumbers.length === 0) {
-        throw new Error("Debe incluir al menos un número de teléfono.");
-    }
+  if (!clientData.telephoneNumbers || clientData.telephoneNumbers.length === 0) {
+    throw new Error("Debe incluir al menos un número de teléfono.");
+  }
 
-    // Elimina posibles campos innecesarios como clientId
-    clientData.telephoneNumbers = clientData.telephoneNumbers.map(t => ({
-        number: t.number // solo enviamos el número
-    }));
+  // Convertir el array de objetos a array de strings
+  const transformedData = {
+    ...clientData,
+    telephoneNumbers: clientData.telephoneNumbers.map(t => t.number)
+  };
 
-    console.log("📤 postClient enviando:", clientData);
+  console.log("📤 Enviando a /register-with-vehicles:", transformedData);
 
-    const response = await fetch(`${URL_API}/api/Client`, {
-        method: "POST",
-        headers: getHeaders(),
-        body: JSON.stringify(clientData)
-    });
+  const response = await fetch(`${URL_API}/api/Client/register-with-vehicles`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(transformedData)
+  });
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`POST /api/Client ERROR ${response.status}:`, errorText);
-        throw new Error(errorText || `Error ${response.status}`);
-    }
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`POST /register-with-vehicles ERROR ${response.status}:`, errorText);
+    throw new Error(errorText || `Error ${response.status}`);
+  }
 
-    return response.json();
-    };
+  return response.json();
+};
+
+
 
 
 export const putClient = (datos: Client, id: number | string) =>

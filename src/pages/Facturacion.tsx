@@ -147,7 +147,7 @@ export function Facturacion() {
       client,
       clientName: client ? `${client.name} ${client.lastName}` : (hasValidData ? 'N/A' : 'Sin datos'),
       clientEmail: client?.email || (hasValidData ? 'N/A' : 'Sin datos'),
-      clientPhone: client?.phone || (hasValidData ? 'N/A' : 'Sin datos'),
+      clientPhone: client?.telephoneNumbers?.map(t => t.number).join(', ') || (hasValidData ? 'N/A' : 'Sin datos'),
       vehicleInfo: vehicle ? `${vehicle.brand} ${vehicle.model}` : (hasValidData ? 'N/A' : 'Sin datos'),
       vehicleVin: vehicle?.vin || (hasValidData ? 'N/A' : 'Sin datos'),
       hasValidData,
