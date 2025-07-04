@@ -23,6 +23,11 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
     return <Navigate to="/login" replace />;
   }
 
+  console.log("🔐 Role del usuario:", user?.rol);
+  console.log("🔐 Roles permitidos:", allowedRoles);
+  console.log("✅ Rol del usuario:", user?.rol);
+
+
   if (allowedRoles && user && !allowedRoles.includes(user.rol)) {
     return (
       <div className="min-h-screen flex items-center justify-center">

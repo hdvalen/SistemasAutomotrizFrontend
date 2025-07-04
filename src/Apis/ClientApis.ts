@@ -1,83 +1,75 @@
+// src/Apis/ClientApis.ts
 import type { Client } from "../types";
 
 const URL_API = "http://localhost:5070";
-const myHeaders = new Headers({
-    "Content-Type": "application/json"
-});
+
+// 1) Helper para construir headers con Content-Type y Bearer token
+function getHeaders() {
+  const token = localStorage.getItem('token') || '';
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  };
+}
 
 export const getClient = async (): Promise<Client[] | null> => {
-    try {
-        const response = await fetch(`${URL_API}/api/Client`, {
-            method: 'GET',
-            headers: myHeaders
-        });
-
-        switch (response.status) {
-            case 200:
-                const data: Client[] = await response.json();
-                return data;
-            case 401:
-                console.error("No autorizado o token inválido");
-                break;
-            case 404:
-                console.error("El cliente no existe");
-                break;
-            default:
-                console.error("Error inesperado. Contacte al administrador.");
-        }
-    } catch (error) {
-        console.error("Error de red o servidor:", error);
+  try {
+    const response = await fetch(`${URL_API}/api/Client`, {
+      method: 'GET',
+      headers: getHeaders()
+    });
+    if (response.ok) {
+      return await response.json();
     }
-
-    return null; // en caso de error
+    console.error(`GET /api/Client falló con status ${response.status}`);
+  } catch (error) {
+    console.error("Error de red o servidor en getClient:", error);
+  }
+  return null;
 };
 
-export const postClient = async (datos: Client): Promise<any | undefined> => {
-    try {
-        // Remove id if present
-        const { id, ...clientData } = datos;
-        console.log("Datos enviados a postClient:", clientData);
+export const postClient = async (datos: Client): Promise<any> => {
+  const { id, ...clientData } = datos;
 
-        const response = await fetch(`${URL_API}/api/Client`, {
-            method: "POST",
-            headers: myHeaders,
-            body: JSON.stringify(clientData)
-        });
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Error en la solicitud POST: ${response.status} - ${errorText}`);
-            return undefined;
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error en la solicitud POST:', error);
-    }
-}
+  if (!clientData.telephoneNumbers || clientData.telephoneNumbers.length === 0) {
+    throw new Error("Debe incluir al menos un número de teléfono.");
+  }
 
-export const putClient = async (datos: Client, id: number | string): Promise<Response | undefined> => {
-    try {
-        return await fetch(`${URL_API}/api/Client/${id}`, {
-            method: "PUT",
-            headers: myHeaders,
-            body: JSON.stringify(datos)
-        });
-    } catch (error) {
-        console.error('Error en la solicitud PUT:', error);
-    }
-}
+  // Convertir el array de objetos a array de strings
+  const transformedData = {
+    ...clientData,
+    telephoneNumbers: clientData.telephoneNumbers.map(t => t.number)
+  };
 
-export const deleteClient = async (id: number | string): Promise<Response | undefined> => {
-    try {
-        const response = await fetch(`${URL_API}/api/Client/${id}`, {
-            method: "DELETE",
-            headers: myHeaders,
-        });
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Error en la solicitud DELETE: ${response.status} - ${errorText}`);
-        }
-        return response;
-    } catch (error) {
-        console.error('Error en la solicitud DELETE:', error);
-    }
-}
+  console.log("📤 Enviando a /register-with-vehicles:", transformedData);
+
+  const response = await fetch(`${URL_API}/api/Client/register-with-vehicles`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(transformedData)
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`POST /register-with-vehicles ERROR ${response.status}:`, errorText);
+    throw new Error(errorText || `Error ${response.status}`);
+  }
+
+  return response.json();
+};
+
+
+
+
+export const putClient = (datos: Client, id: number | string) =>
+  fetch(`${URL_API}/api/Client/${id}`, {
+    method: "PUT",
+    headers: getHeaders(),
+    body: JSON.stringify(datos)
+  });
+
+export const deleteClient = (id: number | string) =>
+  fetch(`${URL_API}/api/Client/${id}`, {
+    method: "DELETE",
+    headers: getHeaders(),
+  });

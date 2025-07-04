@@ -1,15 +1,36 @@
 export interface User {
-  isActive: unknown;
+  id: number;
+  name?: string;
+  lastName?: string;
+  userName: string;
+  email: string;
+  password: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  rol: UserRole;
+}
+
+
+export interface DataUserDto {
   id: number;
   name: string;
   lastName: string;
   userName: string;
   email: string;
-  password: string;
-  createdAt: string;
-  updatedAt: string;
-  rol: string;
+  token: string;
+  refreshToken: string;
+  isAuthenticated: boolean;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  rols: UserRole;
+  message?: string;
 }
+
+
+
+
 export type UserRol = {
   userId: number;
   rolId: number;
@@ -22,7 +43,7 @@ export interface Rol {
   updatedAt: string;
 }
 
-export type UserRole = 'administrador' | 'recepcionista' | 'mecanico';
+export type UserRole = 'Administrator' | 'Recepcionist' | 'Mechanic';
 export interface AuthState {
   user: User | null;
   token: string | null;
@@ -30,12 +51,18 @@ export interface AuthState {
   isLoading: boolean;
 }
 
+export interface TelephoneNumber {
+  id?: number;
+  number: string;
+  clientId?: number;
+}
+
 export interface Client {
   id: number;
   name: string;
   lastName: string;
   email: string;
-  phone: string;
+  telephoneNumbers: TelephoneNumber[];
   birth: string;
   identification: string;
   createdAt: string;
@@ -80,6 +107,32 @@ export interface ServiceOrder {
   invoice?: Invoice;
   state?: State;
   typeService?: TypeService;
+}
+
+export interface ClientServiceOrder {
+  id: number;
+  vehiclesId: number;
+  typeServiceId: number;
+  stateId: number;
+  entryDate: string;
+  exitDate: string;
+  isAuthorized: boolean;
+  clientMessage: string;
+  userId: number;
+  vehicleBrand?: string;
+  vehicleModel?: string;
+  vehicleVIN?: string;
+  typeServiceName?: string;
+  typeServicePrice: number;
+  typeServiceDuration: number;
+  stateName?: string;
+  userName?: string;
+}
+
+export interface AuthorizeServiceOrderRequest {
+  serviceOrderId: number;
+  isAuthorized: boolean;
+  clientMessage?: string;
 }
 
 export interface State {
