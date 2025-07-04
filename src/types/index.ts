@@ -101,6 +101,32 @@ export interface ServiceOrder {
   typeService?: TypeService;
 }
 
+export interface ClientServiceOrder {
+  id: number;
+  vehiclesId: number;
+  typeServiceId: number;
+  stateId: number;
+  entryDate: string;
+  exitDate: string;
+  isAuthorized: boolean;
+  clientMessage: string;
+  userId: number;
+  vehicleBrand?: string;
+  vehicleModel?: string;
+  vehicleVIN?: string;
+  typeServiceName?: string;
+  typeServicePrice: number;
+  typeServiceDuration: number;
+  stateName?: string;
+  userName?: string;
+}
+
+export interface AuthorizeServiceOrderRequest {
+  serviceOrderId: number;
+  isAuthorized: boolean;
+  clientMessage?: string;
+}
+
 export interface State {
   id: number;
   name: string;

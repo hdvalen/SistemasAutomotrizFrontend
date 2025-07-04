@@ -17,7 +17,7 @@ import { Diagnostico } from './pages/Diagnostico';
 import { DetallesOrden } from './pages/DetallesOrden';
 import { Estados } from './pages/Estados';
 import { TipodeServicio } from './pages/TipodeServicio';
-import { AutorizacionOrdenServicio } from './pages/AutorizacionOrderServices';
+import AutorizacionOrdenServicio from './pages/AutorizacionOrderServices';
 
 
 function AppRoutes() {

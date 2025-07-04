@@ -6,7 +6,6 @@ import { Wrench, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { SketchfabEmbed2 } from '../ui/SketchEmbed';
-import { AutorizacionOrdenServicio } from '../../pages/AutorizacionOrderServices';
 
 export function LoginForm() {
   const { login, isLoading } = useAuth();
