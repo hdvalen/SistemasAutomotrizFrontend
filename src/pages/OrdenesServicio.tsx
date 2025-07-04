@@ -161,14 +161,6 @@ export function OrdenesServicio() {
       });
       return;
     }
-    if (!formValues.isAuthorized) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Debes marcar la casilla de autorización del cliente para registrar la orden.'
-      });
-      return;
-    }
     if (selectedOrden) {
       const response1 = await putServiceOrder(formValues as ServiceOrder, selectedOrden.id);
       if (!response1 || !response1.ok) {
@@ -538,22 +530,6 @@ export function OrdenesServicio() {
               </option>
             ))}
           </Select>
-
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="isAuthorized"
-              checked={!!formValues.isAuthorized}
-              onChange={e => setFormValues(prev => ({
-                ...prev,
-                isAuthorized: e.target.checked
-              }))}
-              className="form-checkbox h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500"
-            />
-            <label htmlFor="isAuthorized" className="text-sm font-medium text-gray-700">
-              Autorizado por el cliente
-            </label>
-          </div>
         </div>
 
         <div className="space-y-4">
