@@ -1,15 +1,19 @@
 import type { UserRol } from "../types";
 
 const URL_API = "http://localhost:5070";
-const myHeaders = new Headers({
-    "Content-Type": "application/json"
-});
+function getHeaders() {
+  const token = localStorage.getItem('token') || '';
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  };
+}
 
 export const getUserRol = async (): Promise<UserRol[] | null> => {
     try {
         const response = await fetch(`${URL_API}/api/UserRol`, {
             method: 'GET',
-            headers: myHeaders
+            headers: getHeaders()
         });
 
         switch (response.status) {
@@ -38,7 +42,7 @@ export const postUserRol = async (datos: UserRol): Promise<any | undefined> => {
 
         const response = await fetch(`${URL_API}/api/UserRol`, {
             method: "POST",
-            headers: myHeaders,
+            headers: getHeaders(),
             body: JSON.stringify(datos)
         });
         if (!response.ok) {
@@ -56,7 +60,7 @@ export const putUserRol = async (datos: UserRol, id: number | string): Promise<R
     try {
         return await fetch(`${URL_API}/api/UserRol/${id}`, {
             method: "PUT",
-            headers: myHeaders,
+            headers: getHeaders(),
             body: JSON.stringify(datos)
         });
     } catch (error) {
@@ -68,7 +72,7 @@ export const deleteUserRol = async (id: number | string): Promise<Response | und
     try {
         const response = await fetch(`${URL_API}/api/UserRol/${id}`, {
             method: "DELETE",
-            headers: myHeaders,
+            headers: getHeaders(),
         });
         if (!response.ok) {
             const errorText = await response.text();
