@@ -29,6 +29,8 @@ export interface DataUserDto {
 }
 
 
+
+
 export type UserRol = {
   userId: number;
   rolId: number;
@@ -49,12 +51,18 @@ export interface AuthState {
   isLoading: boolean;
 }
 
+export interface TelephoneNumber {
+  id?: number;
+  number: string;
+  clientId?: number;
+}
+
 export interface Client {
   id: number;
   name: string;
   lastName: string;
   email: string;
-  phone: string;
+  telephoneNumbers: TelephoneNumber[];
   birth: string;
   identification: string;
   createdAt: string;
